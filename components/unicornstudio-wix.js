@@ -36,7 +36,7 @@ class UnicornStudioEmbed extends HTMLElement {
       } else {
         const appendScriptToHead = () => {
           const script = document.createElement("script");
-          script.src = "https://cdn.unicorn.studio/v1.4.1/unicornStudio.umd.js";
+          script.src = "https://cdn.unicorn.studio/v1.4.2/unicornStudio.umd.js";
           script.onload = () => {
             resolve();
           };

@@ -25,16 +25,26 @@ export default function UnicornStudioEmbed(props) {
 
         const initializeScript = (callback) => {
             const existingScript = document.querySelector(
-                'script[src^="https://cdn.unicorn.studio"]'
+                'script[src^="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js"]'
             )
             if (!existingScript) {
                 const script = document.createElement("script")
                 script.src =
-                    "https://cdn.unicorn.studio/v1.4.2/unicornStudio.umd.js"
+                    "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.3/dist/unicornStudio.umd.js"
                 script.onload = callback
+                script.onerror = () => console.error("Failed to load UnicornStudio script")
                 document.head.appendChild(script)
             } else {
-                callback()
+                if (window.UnicornStudio) {
+                    callback()
+                } else {
+                    const waitForLoad = setInterval(() => {
+                        if (window.UnicornStudio) {
+                            clearInterval(waitForLoad)
+                            callback()
+                        }
+                    }, 100)
+                }
             }
         }
 

@@ -41,10 +41,10 @@ export default function UnicornScene({
     if (typeof window === 'undefined') return;
 
     const initializeScript = (callback: () => void) => {
-      const version = '1.4.2';
+      const version = '1.4.3';
 
       const existingScript = document.querySelector(
-        'script[src^="https://cdn.unicorn.studio"]'
+        'script[src^="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.3/dist/unicornStudio.umd.js"]'
       );
 
       if (existingScript) {
@@ -57,7 +57,7 @@ export default function UnicornScene({
       }
 
       const script = document.createElement('script');
-      script.src = `https://cdn.unicorn.studio/v${version}/unicornStudio.umd.js`;
+      script.src = `https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v${version}/dist/unicornStudio.umd.js`;
       script.async = true;
 
       script.onload = () => {

@@ -34,7 +34,6 @@ export default function UnicornScene({
   const elementRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<any>(null);
   const [error, setError] = useState<string | null>(null);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
   const scriptId = useRef(`us-data-${Math.random().toString(36).slice(2)}`);
 
   useEffect(() => {
@@ -48,7 +47,7 @@ export default function UnicornScene({
       );
 
       if (existingScript) {
-        if (scriptLoaded) {
+        if ((window as any).UnicornStudio) {
           callback();
         } else {
           existingScript.addEventListener('load', callback);
@@ -61,7 +60,6 @@ export default function UnicornScene({
       script.async = true;
 
       script.onload = () => {
-        setScriptLoaded(true);
         callback();
       };
       script.onerror = () => setError('Failed to load UnicornStudio script');

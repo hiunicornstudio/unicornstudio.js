@@ -43,7 +43,7 @@ export default function UnicornScene({
       const version = '1.4.4';
 
       const existingScript = document.querySelector(
-        'script[src^="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.4/dist/unicornStudio.umd.js"]'
+        `script[src^="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v${version}/dist/unicornStudio.umd.js"]`
       );
 
       if (existingScript) {

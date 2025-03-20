@@ -40,10 +40,10 @@ export default function UnicornScene({
     if (typeof window === 'undefined') return;
 
     const initializeScript = (callback: () => void) => {
-      const version = '1.4.5';
+      const version = '1.4.6';
 
       const existingScript = document.querySelector(
-        `script[src^="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v${version}/dist/unicornStudio.umd.js"]`
+        'script[src^="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js"]'
       );
 
       if (existingScript) {

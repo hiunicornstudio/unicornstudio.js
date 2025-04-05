@@ -95,3 +95,50 @@ UnicornStudio.destroy();
 ## Live example
 
 https://codepen.io/georgehastings/pen/ExGrqMJ
+
+
+# Changelog
+v1.4.10
+- Added the changelog to the README
+- Fixed a texture bug with mouse effects as child effects
+
+v.1.4.9
+- scene.destroy() now removes canvas element as this is the expected behavior
+- fixes a bug where some element properties were not responsive to breakpoints
+- fixes a bug where some effect properties did not respond to events
+- fixes some bugs with appear events when scenes are scroll away / tabbed away mid animation
+
+v1.4.8
+- Fixed a bug when resizing mouse trail effects
+- Fixed a bug where videos would pause after the tab was inactive for awhile
+- Other minor bugfixes
+
+v1.4.7
+- Added breakpoint control for events
+
+v1.4.6
+- Fixed a bug that prevented effects from getting responsiveness updates after initial pageload
+- Fixed a bug where isFixed scenes mouse tracking was wrong
+
+v1.4.5
+- Added flexibility for future pingpong effects
+- Bugfix for scene.destroy()
+
+v1.4.4
+- Scene resizing is now way more responsive and way less memory intensive
+- New texture preloading logic for faster load times
+- Overall performance enhancements
+
+v1.4.3
+- Scene resizing is now way more responsive and way less memory intensive
+- New texture preloading logic for faster load times
+- Overall performance enhancements
+
+v.1.4.2
+- Handles hover events for hovering over the elements themselves
+- Performance enhancements
+
+v1.4.1
+- This release adds events to all element layers (Images/Shapes/Text)
+- Adds support for handling videos
+- Stability improvements

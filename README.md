@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.8/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.9/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -28,7 +28,7 @@ Any element with `data-us-project` will get initialized by calling `UnicornStudi
   data-us-scale="1"
   data-us-dpi="1.5"
   data-us-lazyload="true"
-  data-us-disableMobile="true"
+  data-us-disablemobile="true"
   data-us-alttext="Welcome to Unicorn Studio"
   data-us-arialabel="This is a canvas scene"
 ></div>
@@ -72,6 +72,9 @@ You can add a scene dynamically during or after pageload.
       // scene is ready
       // To remove a scene, you can use:
       // scene.destroy()
+
+      // if the scenes container changes size and you need to resize the scene
+      // scene.resize()
     })
     .catch((err) => {
       console.error(err);

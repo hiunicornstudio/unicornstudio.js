@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.11/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.12/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -98,6 +98,12 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.12
+- Corrected unecessary texture creation in multipass planes
+- Fixed a bug that prevented planes from being downsampled correctly
+- Fixed a bug that didn't remove text when using scene.destroy()
+- Fixed a texture loading race condition bug
+
 v1.4.11
 - Fixed a texture handling bug when using multiple effects with blue noise
 - Fixed some inconsistency with font weights

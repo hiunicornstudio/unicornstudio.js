@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.13/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.14/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -98,8 +98,11 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.14
+- Fixes an image texture handling bug 
+
 v1.4.13
-- Fixes a downsmapling bug from the previous release
+- Fixes a downsampling bug from the previous release
 
 v1.4.12
 - Corrected unecessary texture creation in multipass planes

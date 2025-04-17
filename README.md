@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.15/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.16/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -98,7 +98,7 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
-v1.4.15
+v1.4.16
 - Removed a code check that automatically throttled scene quality by checking for low end devices or GPUs. At best it likely had little positive impact and at worst it thew false positives in certain browsers and high end mobile devices.  
 - Fixed a bug that broke user downsapling for element layers
 

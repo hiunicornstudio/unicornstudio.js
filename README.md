@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.14/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.15/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -54,7 +54,7 @@ You can add a scene dynamically during or after pageload.
     elementId: "unicorn", // id of the HTML element to render your scene in (the scene will use its dimensions)
     fps: 60, // frames per second (0-120) [optional]
     scale: 1, // rendering scale, use smaller values for performance boost (0.25-1) [optional]
-    dpi: 1, // pixel ratio [optional]
+    dpi: 1.5, // pixel ratio [optional]
     projectId: "YOUR_PROJECT_EMBED_ID", // the id string for your embed (get this from "embed" export)
     lazyLoad: true, // will not initialize the scene until it scrolls into view
     filePath: "path/to/your/PROJECT_ID.json", // if youre hosting your own exported json code, point to it here (do not use both filePath and projectId, only one is required)
@@ -98,6 +98,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.15
+- Removed a code check that automatically throttled scene quality by checking for low end devices or GPUs. At best it likely had little positive impact and at worst it thew false positives in certain browsers and high end mobile devices.  
+- Fixed a bug that broke user downsapling for element layers
+
 v1.4.14
 - Fixes an image texture handling bug 
 

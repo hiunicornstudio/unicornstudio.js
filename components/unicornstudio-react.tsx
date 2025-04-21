@@ -26,13 +26,13 @@ export default function UnicornScene({
   scale = 1,
   dpi = 1.5,
   fps = 60,
-  altText = "Unicorn Studio Animation",
+  altText = "Unicorn Scene",
   ariaLabel = altText,
   className = "",
   lazyLoad = false,
 }: UnicornSceneProps) {
   const elementRef = useRef<HTMLDivElement>(null);
-  const sceneRef = useRef<any>(null);
+  const sceneRef = useRef<{ destroy: () => void } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const scriptId = useRef(`us-data-${Math.random().toString(36).slice(2)}`);
 
@@ -47,7 +47,7 @@ export default function UnicornScene({
       );
 
       if (existingScript) {
-        if ((window as any).UnicornStudio) {
+        if ((window as Window & { UnicornStudio?: unknown }).UnicornStudio) {
           callback();
         } else {
           existingScript.addEventListener('load', callback);
@@ -88,20 +88,29 @@ export default function UnicornScene({
         throw new Error('No project ID or JSON file path provided');
       }
 
-      const UnicornStudio = (window as any).UnicornStudio;
+      interface UnicornStudioType {
+        init: (config: { scale: number; dpi: number }) => Promise<Array<{
+          element: HTMLElement;
+          destroy: () => void;
+          contains?: (element: HTMLElement | null) => boolean;
+        }>>;
+      }
+
+      const UnicornStudio = (window as Window & { UnicornStudio?: UnicornStudioType }).UnicornStudio;
 
       if (!UnicornStudio) {
         throw new Error('UnicornStudio not found');
       }
 
-      if (sceneRef.current) {
+      if (sceneRef.current?.destroy) {
         sceneRef.current.destroy();
       }
 
-      UnicornStudio.init({
+
+      await UnicornStudio?.init({
         scale,
         dpi,
-      }).then((scenes: any[]) => {
+      }).then((scenes) => {
         const ourScene = scenes.find(
           (scene) =>
             scene.element === elementRef.current ||
@@ -113,10 +122,12 @@ export default function UnicornScene({
       });
     };
 
-    initializeScript(initializeScene);
+    initializeScript(() => {
+      void initializeScene();
+    });
 
     return () => {
-      if (sceneRef.current) {
+      if (sceneRef.current?.destroy) {
         sceneRef.current.destroy();
         sceneRef.current = null;
       }

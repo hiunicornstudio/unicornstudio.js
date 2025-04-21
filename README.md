@@ -166,3 +166,18 @@ v1.4.1
 - This release adds events to all element layers (Images/Shapes/Text)
 - Adds support for handling videos
 - Stability improvements
+
+## License
+
+Copyright © 2025 Unicorn Studio (UNCRN LLC)
+
+Permission is granted to use this software only for integration with legitimate Unicorn Studio projects. The source code is made available for transparency and to facilitate integration, but remains proprietary.
+
+Unauthorized uses include but are not limited to:
+1. Using this software in any way that violates Unicorn Studio's Terms of Service
+2. Creating derivative works not approved by Unicorn Studio
+3. Using this software with non-Unicorn Studio projects
+4. Reverse engineering this software to recreate Unicorn Studio functionality
+5. Removing or altering any license, copyright, watermark, or other proprietary notices
+
+This license is subject to termination if violated. All rights not explicitly granted are reserved.

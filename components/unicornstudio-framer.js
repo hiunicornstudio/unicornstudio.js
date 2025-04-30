@@ -30,7 +30,7 @@ export default function UnicornStudioEmbed(props) {
             if (!existingScript) {
                 const script = document.createElement("script")
                 script.src =
-                    "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.18/dist/unicornStudio.umd.js"
+                    "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.19/dist/unicornStudio.umd.js"
                 script.onload = callback
                 script.onerror = () => console.error("Failed to load UnicornStudio script")
                 document.head.appendChild(script)

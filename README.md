@@ -99,9 +99,9 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 # Changelog
 v1.4.19
-— Much more efficient downsampling logic in plane initialization
-— Created vertices by accident for noise and sine effects
-— No longer creates a shader program for hidden background layers
+- Much more efficient downsampling logic in plane initialization
+- Created vertices by accident for noise and sine effects
+- No longer creates a shader program for hidden background layers
 
 v1.4.18
 - Fixed a bug with handling multi-pass child effects like water ripple

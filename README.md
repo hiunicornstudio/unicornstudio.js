@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.19/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.20/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -98,6 +98,9 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.20
+- Fixes texture stretch bug when background is hidden and an element is the first layer
+
 v1.4.19
 - Much more efficient downsampling logic in plane initialization
 - Created vertices by accident for noise and sine effects

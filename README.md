@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.20/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.21/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -75,6 +75,12 @@ You can add a scene dynamically during or after pageload.
 
       // if the scenes container changes size and you need to resize the scene
       // scene.resize()
+
+      // if you need to pause the scene
+      // scene.paused = true;
+
+      // if you need to resume the scene
+      // scene.paused = false;
     })
     .catch((err) => {
       console.error(err);
@@ -98,6 +104,13 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.21
+- Continues text rendering even if font fails to load
+- Fixes bug with effects that use canvas as uBgTexture twice
+- Fixes bug where rotation animations didnt work for text elements
+- Adds the "scene.paused" parameter to pause the scene
+- Minor optimizations
+
 v1.4.20
 - Fixes texture stretch bug when background is hidden and an element is the first layer
 

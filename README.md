@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.21/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.22/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -104,6 +104,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.22
+- Child effect rendertarget bugfix
+- Improved caching and mouse tracking performance
+
 v1.4.21
 - Continues text rendering even if font fails to load
 - Fixes bug with effects that use canvas as uBgTexture twice

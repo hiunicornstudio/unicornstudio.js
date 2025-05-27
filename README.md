@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.22/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.23/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -58,6 +58,7 @@ You can add a scene dynamically during or after pageload.
     projectId: "YOUR_PROJECT_EMBED_ID", // the id string for your embed (get this from "embed" export)
     lazyLoad: true, // will not initialize the scene until it scrolls into view
     filePath: "path/to/your/PROJECT_ID.json", // if youre hosting your own exported json code, point to it here (do not use both filePath and projectId, only one is required)
+    fixed: false // whether the scene should behave like a fixed element or not. automatic by default but this gives explicit control
     altText: "Welcome to Unicorn Studio", // optional text for SEO, going inside the <canvas> tag
     ariaLabel: "This is a canvas scene", // optional text for the aria-label attribute on the <canvas> element
     production: false // when true, will hit the global edge CDN, learn more in the help docs
@@ -104,6 +105,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.23
+- Fixed a bug where mouse tracking would get offset when moved while scrolling
+- Added "fixed" param to declaratively make a scene fixed with data-us-fixed
+
 v1.4.22
 - Child effect rendertarget bugfix
 - Improved caching and mouse tracking performance

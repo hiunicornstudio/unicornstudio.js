@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.23/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.24/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -105,9 +105,12 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.24
+- Fixes a bug with texture handling for multipass child effects
+
 v1.4.23
-- Fixed a bug where mouse tracking would get offset when moved while scrolling
-- Added "fixed" param to declaratively make a scene fixed with data-us-fixed
+- Fixes a bug where mouse tracking would get offset when moved while scrolling
+- Adds "fixed" param to declaratively make a scene fixed with data-us-fixed
 
 v1.4.22
 - Child effect rendertarget bugfix

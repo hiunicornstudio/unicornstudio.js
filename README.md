@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.24/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.25/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -105,6 +105,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.25
+- Enables momentum for mouse trail effects (light, mouse, ripple)
+- More mouse perf optimizations
+
 v1.4.24
 - Fixes a bug with texture handling for multipass child effects
 

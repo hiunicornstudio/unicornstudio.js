@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.25/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.26/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -58,7 +58,7 @@ You can add a scene dynamically during or after pageload.
     projectId: "YOUR_PROJECT_EMBED_ID", // the id string for your embed (get this from "embed" export)
     lazyLoad: true, // will not initialize the scene until it scrolls into view
     filePath: "path/to/your/PROJECT_ID.json", // if youre hosting your own exported json code, point to it here (do not use both filePath and projectId, only one is required)
-    fixed: false // whether the scene should behave like a fixed element or not. automatic by default but this gives explicit control
+    fixed: false, // whether the scene should behave like a fixed element or not. automatic by default but this gives explicit control
     altText: "Welcome to Unicorn Studio", // optional text for SEO, going inside the <canvas> tag
     ariaLabel: "This is a canvas scene", // optional text for the aria-label attribute on the <canvas> element
     production: false // when true, will hit the global edge CDN, learn more in the help docs
@@ -105,6 +105,11 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.26
+- Fixes a bug with texture handling of shared textures
+- Eliminated cases of redundant texture loading
+- Fixed a bug handling fontCSS.src being undefined
+
 v1.4.25
 - Enables momentum for mouse trail effects (light, mouse, ripple)
 - More mouse perf optimizations

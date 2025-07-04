@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.26/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.27/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -99,12 +99,18 @@ If you're using UnicornStudio in a SPA with dynamic routing, make sure to destro
 UnicornStudio.destroy();
 ```
 
+## React/Next
+See [this repo](https://github.com/diegopeixoto/unicornstudio-react) for a great react/next npm package. 
+
 ## Live example
 
 https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.27
+- Fixes a bug where appear effects on Element layers wouldn't properly initialize
+
 v1.4.26
 - Fixes a bug with texture handling of shared textures
 - Eliminated cases of redundant texture loading

@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.27/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.28/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -29,6 +29,7 @@ Any element with `data-us-project` will get initialized by calling `UnicornStudi
   data-us-dpi="1.5"
   data-us-lazyload="true"
   data-us-disablemobile="true"
+  data-us-disablemouse="false"
   data-us-alttext="Welcome to Unicorn Studio"
   data-us-arialabel="This is a canvas scene"
 ></div>
@@ -65,7 +66,8 @@ You can add a scene dynamically during or after pageload.
     interactivity: {
       // [optional]
       mouse: {
-        disableMobile: true, // disable touch movement on mobile
+        disableMobile: false, // disable touch movement on mobile
+        disabled: false // disable all mouse interaction
       },
     },
   })
@@ -108,6 +110,14 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.28
+- Adds looping functionality for appear events
+- Adds a disable parameter `data-us-disablemouse` for mouse interactivity that can be used dynamically
+- Fixes a bug where 0 speed effects would still animate
+
+v1.4.27
+- Fixes a bug where appear effects on Element layers wouldn't properly initialize
+
 v1.4.27
 - Fixes a bug where appear effects on Element layers wouldn't properly initialize
 

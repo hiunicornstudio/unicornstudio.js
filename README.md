@@ -110,6 +110,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.29
+- Adds control for video looping
+- Adds control for video playback speed
+
 v1.4.28
 - Adds looping functionality for appear events
 - Adds a disable parameter `data-us-disablemouse` for mouse interactivity that can be used dynamically

@@ -28,8 +28,6 @@ Any element with `data-us-project` will get initialized by calling `UnicornStudi
   data-us-scale="1"
   data-us-dpi="1.5"
   data-us-lazyload="true"
-  data-us-disablemobile="true"
-  data-us-disablemouse="false"
   data-us-alttext="Welcome to Unicorn Studio"
   data-us-arialabel="This is a canvas scene"
 ></div>
@@ -62,7 +60,7 @@ You can add a scene dynamically during or after pageload.
     fixed: false, // whether the scene should behave like a fixed element or not. automatic by default but this gives explicit control
     altText: "Welcome to Unicorn Studio", // optional text for SEO, going inside the <canvas> tag
     ariaLabel: "This is a canvas scene", // optional text for the aria-label attribute on the <canvas> element
-    production: false // when true, will hit the global edge CDN, learn more in the help docs
+    production: false, // when true, will hit the global edge CDN, learn more in the help docs
     interactivity: {
       // [optional]
       mouse: {

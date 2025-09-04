@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.29/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.30/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,11 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.30
+- Adds mouse axis control
+- Framework for additional easing functions
+- Minor performance optimizations
+
 v1.4.29
 - Adds control for video looping
 - Adds control for video playback speed

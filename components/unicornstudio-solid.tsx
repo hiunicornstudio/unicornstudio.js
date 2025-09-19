@@ -54,7 +54,7 @@ const UnicornScene: Component<UnicornSceneProps> = (props) => {
         if (typeof window === 'undefined') return;
 
         const initializeScript = (callback: () => void) => {
-            const version = '1.4.30';
+            const version = '1.4.31';
             const scriptSrc = `https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v${version}/dist/unicornStudio.umd.js`;
             const existingScript = document.querySelector(`script[src="${scriptSrc}"]`);
 

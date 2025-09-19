@@ -108,6 +108,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.31
+- Fixes bug when background layer is hidden
+- Removes curtains log
+
 v1.4.30
 - Adds mouse axis control
 - Framework for additional easing functions

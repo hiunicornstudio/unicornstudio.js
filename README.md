@@ -108,6 +108,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.32
+- Cancels raf properly when all scenes are destroyed
+- Adds support for disabling text-as-html
+
 v1.4.31
 - Fixes bug when background layer is hidden
 - Removes curtains log

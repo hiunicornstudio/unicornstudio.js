@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.32/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.33/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.33
+- Fixes positioning bug with track mouse x/y controls
+- Stability improvements
+
 v1.4.32
 - Cancels raf properly when all scenes are destroyed
 - Adds support for disabling text-as-html

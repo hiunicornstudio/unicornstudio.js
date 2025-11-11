@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.34/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.35/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,9 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.35
+- Fixes a stretching bug caused by certain effects when the background layer is hidden
+
 v1.4.34
 - Events work for video playback speed now
 - No longer rounds element position to whole pixel numbers

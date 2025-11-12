@@ -1,1 +1,443 @@
-function e(e){return d.has(e)||d.set(e,{scene:null,camera:null,renderer:null,model:null,ambientLight:null,directionalLight:null,fillLight:null,customNormalMap:null,customEnvMap:null,envMap:null}),d.get(e)}function a(e){const a=new THREE.MeshStandardMaterial;return a.color.copy(e.color),a.map=e.map,a.normalMap=e.normalMap,a.emissiveMap=e.emissiveMap,a.aoMap=e.aoMap,a.emissive.copy(e.emissive||new THREE.Color(0,0,0)),a.opacity=e.opacity??1,a.transparent=e.transparent??!1,a.side=e.side??THREE.FrontSide,e.userData||(e.userData={}),a.userData=e.userData,a.userData.converted=!0,a}function t(e,a){e.renderer&&(e.renderer.toneMapping=a?THREE.ACESFilmicToneMapping:THREE.NoToneMapping,e.renderer.toneMappingExposure=a?1.5:1,e.renderer.physicallyCorrectLights=a)}function n(e,a=!1,t=!1){return new Promise(t=>{m.load(e,e=>{a?(e.mapping=THREE.EquirectangularReflectionMapping,e.colorSpace=THREE.SRGBColorSpace,e.minFilter=THREE.LinearFilter,e.magFilter=THREE.LinearFilter,e.generateMipmaps=!1):(e.wrapS=e.wrapT=THREE.RepeatWrapping,e.flipY=!0),t(e)})})}function r(e,a,t,n,r="map",i=1){a.repeat.setScalar(t);const l=-(t-1)/2,o=((null==n?void 0:n.x)??.5)-.5,s=((null==n?void 0:n.y)??.5)-.5;a.offset.set(l+o,l+s),e.model.traverse(e=>{e.isMesh&&(Array.isArray(e.material)?e.material:[e.material]).forEach(e=>{(e.isMeshStandardMaterial||e.isMeshPhongMaterial||e.isMeshLambertMaterial)&&("map"===r?e.map=a:"normalMap"===r&&void 0!==e.normalMap&&(e.normalMap=a,e.normalScale&&e.normalScale.set(i,-i)),e.needsUpdate=!0)})})}function i(e,a,t){var n;a&&e.model&&(null==(n=e.model.userData.materials)||n.forEach(e=>{(e.isMeshStandardMaterial||e.isMeshPhysicalMaterial)&&(e.envMap=a,e.envMapIntensity=t,e.needsUpdate=!0)}))}function l(e,a,t,n,r,l){var o,s,m;if(t&&a)if(e.envMap)e.model.userData.lastEnvMapIntensity!==l&&(null==(m=e.model.userData.materials)||m.forEach(e=>{(e.isMeshStandardMaterial||e.isMeshPhysicalMaterial)&&(e.envMapIntensity=l)}),e.model.userData.lastEnvMapIntensity=l);else{e.envMap=new THREE.Texture,e.envMap.mapping=THREE.EquirectangularReflectionMapping,e.envMap.colorSpace=THREE.SRGBColorSpace,e.envMap.minFilter=THREE.LinearFilter,e.envMap.magFilter=THREE.LinearFilter,e.envMap.generateMipmaps=!1,e.envMap.flipY=!1,e.envMap.image={width:n,height:r};const a=e.renderer.properties.get(e.envMap);a.__webglTexture=t,a.__webglInit=!0;const o=e.renderer.info.memory;o&&o.textures++,i(e,e.envMap,l)}else null==(s=null==(o=e.model)?void 0:o.userData.materials)||s.forEach(e=>{e.envMap&&(e.envMap=null,e.needsUpdate=!0)})}function initialize(a,n){const r=e(n),i=a.canvas?a.canvas.width:a.drawingBufferWidth,l=a.canvas?a.canvas.height:a.drawingBufferHeight;if(0!==i&&0!==l&&(r.scene=new THREE.Scene,r.camera=new THREE.PerspectiveCamera(35,i/l,.1,100),r.camera.position.set(0,0,5),r.renderer=new THREE.WebGLRenderer({canvas:a.canvas,context:a,alpha:!0,preserveDrawingBuffer:!1,premultipliedAlpha:!0,logarithmicDepthBuffer:!0,antialias:"high"===n.quality}),r.renderer.setClearColor(0,0),r.renderer.outputColorSpace=THREE.SRGBColorSpace,t(r,"high"===n.quality),r.renderer.setPixelRatio(1),r.renderer.setSize(i,l,!1),r.ambientLight=new THREE.AmbientLight(n.ambientLightColor||"#ffffff",2*(n.ambientLightIntensity??.75)),r.scene.add(r.ambientLight),r.directionalLight=new THREE.DirectionalLight(n.lightColor||"#ffffff",5*(n.lightIntensity??.2)*2),r.scene.add(r.directionalLight),r.fillLight=new THREE.DirectionalLight(n.fillLightColor||"#ffffff",5*(n.fillLightIntensity??.2)*2),r.scene.add(r.fillLight),n.lightPosition)){const e=10*(n.lightPosition.x-.5),a=10*(n.lightPosition.y-.5),t=10*(n.lightPosition.z-.5);r.directionalLight&&r.directionalLight.position.set(e,-a,t),r.fillLight&&r.fillLight.position.set(.8*-e,.8*a,.8*-t)}}function loadModel(t){const o=e(t);s.load(t.modelUrl,e=>{var s;o.model=e.scene;const m=(new THREE.Box3).setFromObject(o.model),d=m.getCenter(new THREE.Vector3);o.model.position.copy(d).multiplyScalar(-1);const p=m.getSize(new THREE.Vector3),h=Math.max(p.x,p.y,p.z),u=h>0?1/h:1,M=new THREE.Group;if(M.add(o.model),o.model=M,o.model.userData.baseScale=u,o.model.userData.materials=[],o.model.traverse(e=>{e.isMesh&&((Array.isArray(e.material)?e.material:[e.material]).forEach((n,r)=>{var i;if((n.isMeshPhongMaterial||n.isMeshLambertMaterial)&&!(null==(i=n.userData)?void 0:i.converted)){const t=a(n);Array.isArray(e.material)?e.material[r]=t:e.material=t,n=t}o.model.userData.materials.push(n),void 0!==n.metalness&&(n.metalnessMap&&(n.metalnessMap=null,n.needsUpdate=!0),n.metalness=t.materialMetalness??n.metalness),void 0!==n.roughness&&(n.roughnessMap&&(n.roughnessMap=null,n.needsUpdate=!0),n.roughness=t.materialRoughness??n.roughness),(n.isMeshStandardMaterial||n.isMeshPhysicalMaterial)&&(n.envMapIntensity=n.envMapIntensity??1)}),t.renderNormals&&(e.material=c))}),t.colorMapUrl&&!t.renderNormals&&(o.model.traverse(e=>{e.isMesh&&(Array.isArray(e.material)?e.material:[e.material]).forEach(e=>{(e.isMeshStandardMaterial||e.isMeshPhongMaterial||e.isMeshLambertMaterial)&&(e.map=null,e.needsUpdate=!0)})}),n(t.colorMapUrl,!1).then(e=>{r(o,e,Math.max(.001,t.colorMapScale||1),t.colorMapPosition,"map")})),t.normalMapUrl&&!t.renderNormals&&n(t.normalMapUrl,!1,!0).then(e=>{r(o,e,Math.max(.001,t.normalMapScale||1),t.normalMapPosition,"normalMap",t.normalMapIntensity??1)}),t.environmentMapIntensity>0)if(null==(s=t.environmentMapUrl)?void 0:s.trim())n(t.environmentMapUrl,!0).then(e=>{o.customEnvMap=e,i(o,o.customEnvMap,t.environmentMapIntensity)});else{const e=t.local.envTexture;e&&l(o,e.gl,e.webglTexture,e.width,e.height,t.environmentMapIntensity)}o.scene.add(o.model),t.handleModelLoaded()},void 0,e=>{console.error("An error occurred while loading the model:",e)}),t.local.modelLoading=!0}function o(e){return e.local.modelLoading&&!e.local.modelLoaded}function draw(a,t,n){const r=e(n);if(!n.local.modelLoaded)return;if(!r.renderer||!r.renderer.getContext()||r.renderer.getContext().isContextLost())return console.warn("Three.js renderer context lost, reinitializing..."),void(n.local.initialized=!1);const i=a.canvas?a.canvas.width:a.drawingBufferWidth,l=a.canvas?a.canvas.height:a.drawingBufferHeight;if(0===i||0===l)return;let o=0,s=0,m=0,c=0,d=0,p=0;if(0!=n.trackMouse||0!=n.rotationTracking||0!=n.lightTracking){const e=n.local.mouse||{x:.5,y:.5},a=e.x-.5,t=e.y-.5;0!=n.trackMouse&&(o=a*n.trackMouse,s=-t*n.trackMouse),0!=n.rotationTracking&&(m=-t*n.rotationTracking,c=-a*n.rotationTracking),0!=n.lightTracking&&(d=a*n.lightTracking,p=-t*n.lightTracking)}if(r.camera.userData.dim||(r.camera.userData.dim={}),r.camera.userData.dim.w===i&&r.camera.userData.dim.h===l||(r.camera.aspect=i/l,r.camera.updateProjectionMatrix(),r.renderer.setSize(i,l,!1),r.camera.userData.dim={w:i,h:l}),r.directionalLight&&0!=n.lightTracking&&n.lightPosition){const e=10*(n.lightPosition.x+d-.5),a=10*(n.lightPosition.y+p-.5),t=10*(n.lightPosition.z-.5);r.directionalLight.position.set(e,-a,t),r.fillLight.position.set(.8*-e,.8*a,.8*-t)}if(r.model){const e=r.model.userData.baseScale||1,a=n.getProp("pos"),i=10*n.getProp("scale")*e;if(r.model.scale.set(i,i,i),a){const e=8*(a.x-.5+o),t=8*(a.y-.5+s),n=8*(a.z-.5);r.model.position.set(e,-t,n)}const l=n.getProp("modelRotation");if(l){const e=n.speed>0&&n.animating;let a=(l.y-1+m)*Math.PI*2,i=(l.x-.75+c)*Math.PI*2,o=(l.z-.5)*Math.PI*2;if(e){const e=n.speed*t*.001;n.animationAxis.x>0&&(a+=e*n.animationAxis.x),n.animationAxis.y>0&&(i+=e*n.animationAxis.y),n.animationAxis.z>0&&(o+=e*n.animationAxis.z)}r.model.rotation.set(a,i,o)}}r.renderer.render(r.scene,r.camera),r.renderer.resetState&&r.renderer.resetState()}function dispose(a){const t=e(a);t.customNormalMap&&(t.customNormalMap.dispose(),t.customNormalMap=null),t.customEnvMap&&(t.customEnvMap.dispose(),t.customEnvMap=null),t.envMap&&(t.envMap.dispose(),t.envMap=null),t.model&&(t.model.traverse(e=>{e.isMesh&&(e.geometry&&e.geometry.dispose(),Array.isArray(e.material)?e.material.forEach(e=>e.dispose()):e.material&&e.material.dispose())}),t.scene&&t.scene.remove(t.model),t.model=null),t.renderer&&(t.renderer.dispose(),t.renderer=null),t.scene=null,t.camera=null,t.ambientLight=null,t.directionalLight=null,t.fillLight=null,d.delete(a)}import{G as GLTFLoader,T as THREE}from"./three-bundle.js";const s=new GLTFLoader,m=new THREE.TextureLoader,c=new THREE.MeshNormalMaterial,d=new WeakMap;
+// Model Renderer - Production Version
+// Optimized renderer without property change tracking (properties assumed to change via state effects only)
+import { THREE, GLTFLoader } from '../three-bundle.js';
+
+// Shared loaders (can be reused across instances)
+const gltfLoader = new GLTFLoader();
+const textureLoader = new THREE.TextureLoader();
+const normalsMaterial = new THREE.MeshNormalMaterial();
+
+// Store Three.js state per layer using WeakMap to avoid Vue reactivity issues
+const layerStates = new WeakMap();
+
+// Helper to get state from layer (each layer gets its own isolated Three.js state)
+function getState(layer) {
+  if (!layerStates.has(layer)) {
+    layerStates.set(layer, {
+      scene: null,
+      camera: null,
+      renderer: null,
+      model: null,
+      ambientLight: null,
+      directionalLight: null,
+      fillLight: null,
+      customNormalMap: null,
+      customEnvMap: null,
+      envMap: null,
+    });
+  }
+  return layerStates.get(layer);
+}
+
+// Helper functions
+function convertToPBR(m) {
+  const n = new THREE.MeshStandardMaterial();
+  n.color.copy(m.color);
+  n.map = m.map;
+  n.normalMap = m.normalMap;
+  n.emissiveMap = m.emissiveMap;
+  n.aoMap = m.aoMap;
+  n.emissive.copy(m.emissive || new THREE.Color(0, 0, 0));
+  n.opacity = m.opacity ?? 1;
+  n.transparent = m.transparent ?? false;
+  n.side = m.side ?? THREE.FrontSide;
+  if (!m.userData) m.userData = {};
+  n.userData = m.userData;
+  n.userData.converted = true;
+  return n;
+}
+
+function applyQualitySettings(state, isHigh) {
+  if (!state.renderer) return;
+  state.renderer.toneMapping = isHigh ? THREE.ACESFilmicToneMapping : THREE.NoToneMapping;
+  state.renderer.toneMappingExposure = isHigh ? 1.5 : 1.0;
+  state.renderer.physicallyCorrectLights = isHigh;
+}
+
+function loadTextureWithSettings(url, isEnvMap = false, isNormalMap = false) {
+  return new Promise((resolve) => {
+    textureLoader.load(url, (tex) => {
+      if (isEnvMap) {
+        tex.mapping = THREE.EquirectangularReflectionMapping;
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.minFilter = THREE.LinearFilter;
+        tex.magFilter = THREE.LinearFilter;
+        tex.generateMipmaps = false;
+      } else {
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.flipY = true;
+      }
+      resolve(tex);
+    });
+  });
+}
+
+function applyTextureToMaterials(state, tex, scale, position, mapType = 'map', normalIntensity = 1) {
+  tex.repeat.setScalar(scale);
+  const offset = -(scale - 1) / 2;
+  const posX = (position?.x ?? 0.5) - 0.5;
+  const posY = (position?.y ?? 0.5) - 0.5;
+  tex.offset.set(offset + posX, offset + posY);
+  state.model.traverse((child) => {
+    if (child.isMesh) {
+      const mats = Array.isArray(child.material) ? child.material : [child.material];
+      mats.forEach(m => {
+        if (m.isMeshStandardMaterial || m.isMeshPhongMaterial || m.isMeshLambertMaterial) {
+          if (mapType === 'map') {
+            m.map = tex;
+          } else if (mapType === 'normalMap' && m.normalMap !== undefined) {
+            m.normalMap = tex;
+            if (m.normalScale) {
+              m.normalScale.set(normalIntensity, -normalIntensity);
+            }
+          }
+          m.needsUpdate = true;
+        }
+      });
+    }
+  });
+}
+
+function applyEnvMapToMaterials(state, envTexture, intensity) {
+  if (!envTexture || !state.model) return;
+  
+  state.model.userData.materials?.forEach(m => {
+    if (m.isMeshStandardMaterial || m.isMeshPhysicalMaterial) {
+      m.envMap = envTexture;
+      m.envMapIntensity = intensity;
+      m.needsUpdate = true;
+    }
+  });
+}
+
+function updateEnvMapFromWebGL(state, gl, webglTexture, width, height, intensity) {
+  if (!webglTexture || !gl) {
+    state.model?.userData.materials?.forEach(m => {
+      if (m.envMap) {
+        m.envMap = null;
+        m.needsUpdate = true;
+      }
+    });
+    return;
+  }
+  
+  if (!state.envMap) {
+    state.envMap = new THREE.Texture();
+    state.envMap.mapping = THREE.EquirectangularReflectionMapping;
+    state.envMap.colorSpace = THREE.SRGBColorSpace;
+    state.envMap.minFilter = THREE.LinearFilter;
+    state.envMap.magFilter = THREE.LinearFilter;
+    state.envMap.generateMipmaps = false;
+    state.envMap.flipY = false;
+    state.envMap.image = { width, height };
+    
+    const props = state.renderer.properties.get(state.envMap);
+    props.__webglTexture = webglTexture;
+    props.__webglInit = true;
+    
+    const info = state.renderer.info.memory;
+    if (info) info.textures++;
+    
+    applyEnvMapToMaterials(state, state.envMap, intensity);
+  } else if (state.model.userData.lastEnvMapIntensity !== intensity) {
+    state.model.userData.materials?.forEach(m => {
+      if (m.isMeshStandardMaterial || m.isMeshPhysicalMaterial) {
+        m.envMapIntensity = intensity;
+      }
+    });
+    state.model.userData.lastEnvMapIntensity = intensity;
+  }
+}
+
+// Exported functions
+export function initialize(ctx, layer) {
+  const state = getState(layer);
+  const w = ctx.canvas ? ctx.canvas.width : ctx.drawingBufferWidth;
+  const h = ctx.canvas ? ctx.canvas.height : ctx.drawingBufferHeight;
+  if (w === 0 || h === 0) return;
+
+  state.scene = new THREE.Scene();
+  state.camera = new THREE.PerspectiveCamera(35, w / h, 0.1, 100);
+  state.camera.position.set(0, 0, 5);
+
+  state.renderer = new THREE.WebGLRenderer({
+    canvas: ctx.canvas,
+    context: ctx,
+    alpha: true,
+    preserveDrawingBuffer: false,
+    premultipliedAlpha: true,
+    logarithmicDepthBuffer: true,
+    antialias: layer.quality === 'high'
+  });
+  state.renderer.setClearColor(0x000000, 0);
+  state.renderer.outputColorSpace = THREE.SRGBColorSpace;
+  applyQualitySettings(state, layer.quality === 'high');
+  state.renderer.setPixelRatio(1);
+  state.renderer.setSize(w, h, false);
+
+  state.ambientLight = new THREE.AmbientLight(layer.ambientLightColor || '#ffffff', (layer.ambientLightIntensity ?? 0.75) * 2);
+  state.scene.add(state.ambientLight);
+
+  state.directionalLight = new THREE.DirectionalLight(layer.lightColor || '#ffffff', (layer.lightIntensity ?? 0.2) * 5 * 2);
+  state.scene.add(state.directionalLight);
+
+  state.fillLight = new THREE.DirectionalLight(layer.fillLightColor || '#ffffff', (layer.fillLightIntensity ?? 0.2) * 5 * 2);
+  state.scene.add(state.fillLight);
+
+  if (layer.lightPosition) {
+    const worldX = (layer.lightPosition.x - 0.5) * 10;
+    const worldY = (layer.lightPosition.y - 0.5) * 10;
+    const worldZ = (layer.lightPosition.z - 0.5) * 10;
+    if (state.directionalLight) state.directionalLight.position.set(worldX, -worldY, worldZ);
+    if (state.fillLight) state.fillLight.position.set(-worldX * 0.8, worldY * 0.8, -worldZ * 0.8);
+  }
+}
+
+export function loadModel(layer) {
+  const state = getState(layer);
+  
+  gltfLoader.load(
+    layer.modelUrl,
+    (gltf) => {
+      state.model = gltf.scene;
+
+      const box = new THREE.Box3().setFromObject(state.model);
+      const center = box.getCenter(new THREE.Vector3());
+      state.model.position.copy(center).multiplyScalar(-1);
+
+      const size = box.getSize(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const baseScale = maxDim > 0 ? 1 / maxDim : 1;
+      const modelGroup = new THREE.Group();
+      modelGroup.add(state.model);
+      state.model = modelGroup;
+      state.model.userData.baseScale = baseScale;
+
+      state.model.userData.materials = [];
+      state.model.traverse((child) => {
+        if (child.isMesh) {
+          const mats = Array.isArray(child.material) ? child.material : [child.material];
+          mats.forEach((m, idx) => {
+            if ((m.isMeshPhongMaterial || m.isMeshLambertMaterial) && !m.userData?.converted) {
+              const newMat = convertToPBR(m);
+              if (Array.isArray(child.material)) {
+                child.material[idx] = newMat;
+              } else {
+                child.material = newMat;
+              }
+              m = newMat;
+            }
+            state.model.userData.materials.push(m);
+            if (m.metalness !== undefined) {
+              if (m.metalnessMap) { m.metalnessMap = null; m.needsUpdate = true; }
+              m.metalness = layer.materialMetalness ?? m.metalness;
+            }
+            if (m.roughness !== undefined) {
+              if (m.roughnessMap) { m.roughnessMap = null; m.needsUpdate = true; }
+              m.roughness = layer.materialRoughness ?? m.roughness;
+            }
+            if (m.isMeshStandardMaterial || m.isMeshPhysicalMaterial) {
+              m.envMapIntensity = m.envMapIntensity ?? 1.0;
+            }
+          });
+          
+          if (layer.renderNormals) {
+            child.material = normalsMaterial;
+          }
+        }
+      });
+
+      if (layer.colorMapUrl && !layer.renderNormals) {
+        state.model.traverse((child) => {
+          if (child.isMesh) {
+            const mats = Array.isArray(child.material) ? child.material : [child.material];
+            mats.forEach(m => {
+              if (m.isMeshStandardMaterial || m.isMeshPhongMaterial || m.isMeshLambertMaterial) {
+                m.map = null;
+                m.needsUpdate = true;
+              }
+            });
+          }
+        });
+        loadTextureWithSettings(layer.colorMapUrl, false).then(tex => {
+          applyTextureToMaterials(state, tex, Math.max(0.001, layer.colorMapScale || 1), layer.colorMapPosition, 'map');
+        });
+      }
+
+      if (layer.normalMapUrl && !layer.renderNormals) {
+        loadTextureWithSettings(layer.normalMapUrl, false, true).then(tex => {
+          applyTextureToMaterials(state, tex, Math.max(0.001, layer.normalMapScale || 1), layer.normalMapPosition, 'normalMap', layer.normalMapIntensity ?? 1);
+        });
+      }
+
+      if (layer.environmentMapIntensity > 0) {
+        if (layer.environmentMapUrl?.trim()) {
+          loadTextureWithSettings(layer.environmentMapUrl, true).then(tex => {
+            state.customEnvMap = tex;
+            applyEnvMapToMaterials(state, state.customEnvMap, layer.environmentMapIntensity);
+          });
+        } else {
+          const envTexture = layer.local.envTexture;
+          if (envTexture) {
+            updateEnvMapFromWebGL(
+              state,
+              envTexture.gl,
+              envTexture.webglTexture,
+              envTexture.width,
+              envTexture.height,
+              layer.environmentMapIntensity
+            );
+          }
+        }
+      }
+
+      state.scene.add(state.model);
+      layer.handleModelLoaded();
+    },
+    undefined,
+    (error) => {
+      console.error('An error occurred while loading the model:', error);
+    }
+  );
+  
+  // Mark as loading started (prevents re-triggering load)
+  layer.local.modelLoading = true;
+}
+
+// Check if model is currently loading
+export function isLoading(layer) {
+  return layer.local.modelLoading && !layer.local.modelLoaded;
+}
+
+export function draw(ctx, t, layer) {
+  const state = getState(layer);
+  if (!layer.local.modelLoaded) return;
+
+  if (!state.renderer || !state.renderer.getContext() || state.renderer.getContext().isContextLost()) {
+    console.warn('Three.js renderer context lost, reinitializing...');
+    layer.local.initialized = false;
+    return;
+  }
+
+  const w = ctx.canvas ? ctx.canvas.width : ctx.drawingBufferWidth;
+  const h = ctx.canvas ? ctx.canvas.height : ctx.drawingBufferHeight;
+  if (w === 0 || h === 0) return;
+
+  let mouseX = 0, mouseY = 0, mouseRotX = 0, mouseRotY = 0, mouseLightX = 0, mouseLightY = 0;
+
+  if (layer.trackMouse != 0 || layer.rotationTracking != 0 || layer.lightTracking != 0) {
+    const mouse = layer.local.mouse || { x: 0.5, y: 0.5 };
+    const mouseOffsetX = mouse.x - 0.5;
+    const mouseOffsetY = mouse.y - 0.5;
+
+    if (layer.trackMouse != 0) {
+      mouseX = mouseOffsetX * layer.trackMouse;
+      mouseY = -mouseOffsetY * layer.trackMouse;
+    }
+    if (layer.rotationTracking != 0) {
+      mouseRotX = -mouseOffsetY * layer.rotationTracking;
+      mouseRotY = -mouseOffsetX * layer.rotationTracking;
+    }
+    if (layer.lightTracking != 0) {
+      mouseLightX = mouseOffsetX * layer.lightTracking;
+      mouseLightY = -mouseOffsetY * layer.lightTracking;
+    }
+  }
+
+  if (!state.camera.userData.dim) state.camera.userData.dim = {};
+  if (state.camera.userData.dim.w !== w || state.camera.userData.dim.h !== h) {
+    state.camera.aspect = w / h;
+    state.camera.updateProjectionMatrix();
+    state.renderer.setSize(w, h, false);
+    state.camera.userData.dim = { w, h };
+  }
+
+  if (state.directionalLight && layer.lightTracking != 0 && layer.lightPosition) {
+    const wx = (layer.lightPosition.x + mouseLightX - 0.5) * 10;
+    const wy = (layer.lightPosition.y + mouseLightY - 0.5) * 10;
+    const wz = (layer.lightPosition.z - 0.5) * 10;
+    state.directionalLight.position.set(wx, -wy, wz);
+    state.fillLight.position.set(-wx * 0.8, wy * 0.8, -wz * 0.8);
+  }
+
+  if (state.model) {
+    const baseScale = state.model.userData.baseScale || 1;
+    const pos = layer.getProp('pos');
+    const scale = layer.getProp('scale');
+    const s = scale * 10 * baseScale;
+    state.model.scale.set(s, s, s);
+
+    if (pos) {
+      const ox = (pos.x - 0.5 + mouseX) * 8;
+      const oy = (pos.y - 0.5 + mouseY) * 8;
+      const oz = (pos.z - 0.5) * 8;
+      state.model.position.set(ox, -oy, oz);
+    }
+
+    const modelRotation = layer.getProp('modelRotation');
+    if (modelRotation) {
+      const hasAnim = layer.speed > 0 && layer.animating;
+      let rx = (modelRotation.y - 1 + mouseRotX) * Math.PI * 2;
+      let ry = (modelRotation.x - 0.75 + mouseRotY) * Math.PI * 2;
+      let rz = (modelRotation.z - 0.5) * Math.PI * 2;
+      if (hasAnim) {
+        const rs = layer.speed * t * 0.001;
+        if (layer.animationAxis.x > 0) rx += rs * layer.animationAxis.x;
+        if (layer.animationAxis.y > 0) ry += rs * layer.animationAxis.y;
+        if (layer.animationAxis.z > 0) rz += rs * layer.animationAxis.z;
+      }
+      state.model.rotation.set(rx, ry, rz);
+    }
+  }
+
+  state.renderer.render(state.scene, state.camera);
+  if (state.renderer.resetState) state.renderer.resetState();
+}
+
+export function dispose(layer) {
+  const state = getState(layer);
+  
+  if (state.customNormalMap) {
+    state.customNormalMap.dispose();
+    state.customNormalMap = null;
+  }
+  
+  if (state.customEnvMap) {
+    state.customEnvMap.dispose();
+    state.customEnvMap = null;
+  }
+  
+  if (state.envMap) {
+    state.envMap.dispose();
+    state.envMap = null;
+  }
+  
+  if (state.model) {
+    state.model.traverse((child) => {
+      if (child.isMesh) {
+        if (child.geometry) child.geometry.dispose();
+        if (Array.isArray(child.material)) {
+          child.material.forEach(m => m.dispose());
+        } else if (child.material) {
+          child.material.dispose();
+        }
+      }
+    });
+    if (state.scene) state.scene.remove(state.model);
+    state.model = null;
+  }
+  
+  if (state.renderer) {
+    state.renderer.dispose();
+    state.renderer = null;
+  }
+  
+  state.scene = null;
+  state.camera = null;
+  state.ambientLight = null;
+  state.directionalLight = null;
+  state.fillLight = null;
+  
+  // Remove from WeakMap
+  layerStates.delete(layer);
+}

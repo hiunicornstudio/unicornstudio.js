@@ -1,6 +1,6 @@
 // Model Renderer - Production Version
 // Optimized renderer without property change tracking (properties assumed to change via state effects only)
-import { THREE, GLTFLoader } from './three-bundle.js';
+import { THREE, GLTFLoader } from './three-bundle.min.js';
 
 // Shared loaders (can be reused across instances)
 const gltfLoader = new GLTFLoader();

@@ -1,6 +1,6 @@
 // Model Renderer - Production Version
 // Optimized renderer without property change tracking (properties assumed to change via state effects only)
-import { THREE, GLTFLoader } from './three-bundle.min.js';
+import { THREE, GLTFLoader } from './three-bundle.js';
 
 // Shared loaders (can be reused across instances)
 const gltfLoader = new GLTFLoader();
@@ -270,25 +270,11 @@ export function loadModel(layer) {
         });
       }
 
-      if (layer.environmentMapIntensity > 0) {
-        if (layer.environmentMapUrl?.trim()) {
-          loadTextureWithSettings(layer.environmentMapUrl, true).then(tex => {
-            state.customEnvMap = tex;
-            applyEnvMapToMaterials(state, state.customEnvMap, layer.environmentMapIntensity);
-          });
-        } else {
-          const envTexture = layer.local.envTexture;
-          if (envTexture) {
-            updateEnvMapFromWebGL(
-              state,
-              envTexture.gl,
-              envTexture.webglTexture,
-              envTexture.width,
-              envTexture.height,
-              layer.environmentMapIntensity
-            );
-          }
-        }
+      if (layer.environmentMapIntensity > 0 && layer.environmentMapUrl?.trim()) {
+        loadTextureWithSettings(layer.environmentMapUrl, true).then(tex => {
+          state.customEnvMap = tex;
+          applyEnvMapToMaterials(state, state.customEnvMap, layer.environmentMapIntensity);
+        });
       }
 
       state.scene.add(state.model);
@@ -322,6 +308,23 @@ export function draw(ctx, t, layer) {
   const w = ctx.canvas ? ctx.canvas.width : ctx.drawingBufferWidth;
   const h = ctx.canvas ? ctx.canvas.height : ctx.drawingBufferHeight;
   if (w === 0 || h === 0) return;
+
+  // Update env map from render target if available and not using custom URL
+  if (layer.environmentMapIntensity > 0 && !layer.environmentMapUrl?.trim()) {
+    const envTexture = layer.local.envTexture;
+    const intensityChanged = state.model?.userData.lastEnvMapIntensity !== layer.environmentMapIntensity;
+    
+    if (envTexture && (intensityChanged || !state.envMap)) {
+      updateEnvMapFromWebGL(
+        state,
+        envTexture.gl,
+        envTexture.webglTexture,
+        envTexture.width,
+        envTexture.height,
+        layer.environmentMapIntensity
+      );
+    }
+  }
 
   let mouseX = 0, mouseY = 0, mouseRotX = 0, mouseRotY = 0, mouseLightX = 0, mouseLightY = 0;
 

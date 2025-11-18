@@ -508,8 +508,8 @@ export function draw(ctx, t, layer) {
     const hasAnim = speed > 0 && layer.animating;
     
     if (modelRotation && (hasRotMouse || hasAnim || mp.rx !== modelRotation.x || mp.ry !== modelRotation.y || mp.rz !== modelRotation.z)) {
-      let rx = (modelRotation.y - 1 + mouseRotX) * Math.PI * 2;
-      let ry = (modelRotation.x - 0.75 + mouseRotY) * Math.PI * 2;
+      let rx = (modelRotation.y - 0.5 + mouseRotX) * Math.PI * 2 + Math.PI;
+      let ry = (modelRotation.x - 0.5 + mouseRotY) * Math.PI * 2;
       let rz = (modelRotation.z - 0.5) * Math.PI * 2;
       if (hasAnim) {
         const rs = speed * t * 0.001;

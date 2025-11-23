@@ -1,6 +1,7 @@
-import { THREE, GLTFLoader } from './three-bundle.js';
+import { THREE, GLTFLoader, SVGLoader } from './three-bundle.js';
 
 const gltfLoader = new GLTFLoader();
+const svgLoader = new SVGLoader();
 const textureLoader = new THREE.TextureLoader();
 const normalsMaterial = new THREE.MeshNormalMaterial();
 
@@ -196,8 +197,150 @@ export function initialize(ctx, layer) {
 export function loadModel(layer) {
   const state = getState(layer);
   
-  gltfLoader.load(
-    layer.modelUrl,
+  // Reset loading flags
+  layer.local.modelLoaded = false;
+  layer.local.modelLoading = false;
+  
+  const isSVG = layer.modelUrl.split('?')[0].toLowerCase().endsWith('.svg');
+
+  if (isSVG) {
+    svgLoader.load(
+      layer.modelUrl,
+      (data) => {
+        const paths = data.paths;
+        const group = new THREE.Group();
+        
+        const extrudeSettings = {
+          depth: layer.getProp('extrudeDepth') ?? 10,
+          bevelEnabled: layer.getProp('bevelEnabled') ?? false,
+          bevelThickness: layer.getProp('bevelThickness') ?? 1,
+          bevelSize: layer.getProp('bevelSize') ?? 1,
+          bevelSegments: 2
+        };
+
+        for (let i = 0; i < paths.length; i++) {
+          const path = paths[i];
+          const fillColor = path.userData.style.fill;
+
+          if (fillColor !== undefined && fillColor !== 'none') {
+            const material = new THREE.MeshStandardMaterial({
+              color: new THREE.Color().setStyle(fillColor),
+              metalness: layer.getProp('materialMetalness') ?? 0.5,
+              roughness: layer.getProp('materialRoughness') ?? 0.5,
+              side: THREE.DoubleSide
+            });
+
+            const shapes = SVGLoader.createShapes(path);
+
+            for (let j = 0; j < shapes.length; j++) {
+              const shape = shapes[j];
+              const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+              
+              // Calculate UVs based on shape bounds
+              const posAttribute = geometry.attributes.position;
+              const uvAttribute = geometry.attributes.uv;
+              
+              // Compute bounding box of the geometry
+              geometry.computeBoundingBox();
+              const min = geometry.boundingBox.min;
+              const max = geometry.boundingBox.max;
+              const rangeX = max.x - min.x;
+              const rangeY = max.y - min.y;
+              
+              for (let k = 0; k < uvAttribute.count; k++) {
+                const x = posAttribute.getX(k);
+                const y = posAttribute.getY(k);
+                
+                // Normalize UVs to 0-1 range
+                uvAttribute.setXY(k, (x - min.x) / rangeX, (y - min.y) / rangeY);
+              }
+              uvAttribute.needsUpdate = true;
+
+              // Scale mesh Y to flip coordinate system (SVG is y-down, Three.js is y-up)
+              const mesh = new THREE.Mesh(geometry, material);
+              mesh.scale.set(1, -1, 1);
+              group.add(mesh);
+            }
+          }
+        }
+
+        state.model = group;
+        state.model.userData.isSVG = true;
+        state.model.userData.svgPaths = paths;
+
+        const box = new THREE.Box3().setFromObject(state.model);
+        const center = box.getCenter(new THREE.Vector3());
+        state.model.position.copy(center).multiplyScalar(-1);
+
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const baseScale = maxDim > 0 ? 1 / maxDim : 1;
+        
+        const modelGroup = new THREE.Group();
+        modelGroup.add(state.model);
+        state.model = modelGroup;
+        state.model.userData.baseScale = baseScale;
+        state.model.userData.isSVGWrapper = true;
+
+        state.model.userData.materials = [];
+        state.model.userData.textureMaterials = [];
+        state.model.userData.meshes = [];
+        
+        state.model.traverse((child) => {
+          if (child.isMesh) {
+            state.model.userData.meshes.push(child);
+            state.model.userData.materials.push(child.material);
+            state.model.userData.textureMaterials.push(child.material);
+            
+            if (!child.material.userData) child.material.userData = {};
+            child.material.userData.originalMap = null;
+            child.material.userData.originalNormalMap = null;
+          }
+        });
+
+        if (layer.renderNormals && state.model.userData.meshes) {
+          state.model.userData.meshes.forEach(child => {
+            if (!child.userData.originalMaterial) {
+              child.userData.originalMaterial = child.material;
+              child.material = normalsMaterial;
+            }
+          });
+        }
+
+        if (layer.colorMapUrl?.trim() && !layer.renderNormals) {
+          loadTextureWithSettings(layer.colorMapUrl, false).then(tex => {
+            const scale = Math.max(0.001, layer.getProp('colorMapScale') ?? 1);
+            applyTextureToMaterials(state, tex, scale, layer.getProp('colorMapPosition'), 'map');
+            state.customColorMap = tex;
+          });
+        }
+
+        if (layer.normalMapUrl?.trim() && !layer.renderNormals) {
+          loadTextureWithSettings(layer.normalMapUrl, false, true).then(tex => {
+            const scale = Math.max(0.001, layer.getProp('normalMapScale') ?? 1);
+            applyTextureToMaterials(state, tex, scale, layer.getProp('normalMapPosition'), 'normalMap', layer.getProp('normalMapIntensity'));
+            state.customNormalMap = tex;
+          });
+        }
+
+        if (state.customEnvMap && layer.environmentMapIntensity > 0) {
+          applyEnvMapToMaterials(state, state.customEnvMap, layer.environmentMapIntensity);
+        }
+
+        state.scene.add(state.model);
+        layer.handleModelLoaded();
+      },
+      (xhr) => {
+        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+      },
+      (error) => {
+        console.error('An error occurred while loading the SVG:', error);
+        layer.local.modelLoading = false;
+      }
+    );
+  } else {
+    gltfLoader.load(
+      layer.modelUrl,
     (gltf) => {
       state.model = gltf.scene;
 
@@ -290,6 +433,7 @@ export function loadModel(layer) {
       console.error('An error occurred while loading the model:', error);
     }
   );
+  }
   
   layer.local.modelLoading = true;
 }
@@ -509,7 +653,8 @@ export function draw(ctx, t, layer) {
     
     if (modelRotation && (hasRotMouse || hasAnim || mp.rx !== modelRotation.x || mp.ry !== modelRotation.y || mp.rz !== modelRotation.z)) {
       let rx = (modelRotation.y - 0.5 + mouseRotX) * Math.PI * 2 + Math.PI;
-      let ry = (modelRotation.x - 0.5 + mouseRotY) * Math.PI * 2;
+      let ryOffset = state.model.userData.isSVGWrapper ? Math.PI : 0;
+      let ry = (modelRotation.x - 0.5 + mouseRotY) * Math.PI * 2 + ryOffset;
       let rz = (modelRotation.z - 0.5) * Math.PI * 2;
       if (hasAnim) {
         const rs = speed * t * 0.001;

@@ -215,7 +215,7 @@ export function loadModel(layer) {
           bevelEnabled: layer.getProp('bevelEnabled') ?? false,
           bevelThickness: layer.getProp('bevelThickness') ?? 1,
           bevelSize: layer.getProp('bevelSize') ?? 1,
-          bevelSegments: 2
+          bevelSegments: layer.getProp('bevelSegments') ?? 2
         };
 
         for (let i = 0; i < paths.length; i++) {
@@ -247,12 +247,32 @@ export function loadModel(layer) {
               const rangeX = max.x - min.x;
               const rangeY = max.y - min.y;
               
-              for (let k = 0; k < uvAttribute.count; k++) {
-                const x = posAttribute.getX(k);
-                const y = posAttribute.getY(k);
-                
-                // Normalize UVs to 0-1 range
-                uvAttribute.setXY(k, (x - min.x) / rangeX, (y - min.y) / rangeY);
+              const updateUVs = (start, count, isSide) => {
+                for (let k = start; k < start + count; k++) {
+                  let idx = k;
+                  if (geometry.index) {
+                    idx = geometry.index.getX(k);
+                  }
+
+                  if (!isSide) {
+                    const x = posAttribute.getX(idx);
+                    const y = posAttribute.getY(idx);
+                    uvAttribute.setXY(idx, (x - min.x) / rangeX, (y - min.y) / rangeY);
+                  } else {
+                    const u = uvAttribute.getX(idx);
+                    const v = uvAttribute.getY(idx);
+                    const scale = 1 / Math.max(rangeX, rangeY);
+                    uvAttribute.setXY(idx, u * scale, v * scale);
+                  }
+                }
+              };
+
+              if (geometry.groups && geometry.groups.length > 0) {
+                geometry.groups.forEach(g => {
+                  updateUVs(g.start, g.count, g.materialIndex === 1);
+                });
+              } else {
+                updateUVs(0, geometry.index ? geometry.index.count : posAttribute.count, false);
               }
               uvAttribute.needsUpdate = true;
 

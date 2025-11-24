@@ -106,6 +106,78 @@ function applyEnvMapToMaterials(state, envTexture, intensity) {
   });
 }
 
+function createSVGMeshes(paths, extrudeSettings, layer) {
+  const group = new THREE.Group();
+  
+  for (let i = 0; i < paths.length; i++) {
+    const path = paths[i];
+    const fillColor = path.userData.style.fill;
+
+    if (fillColor !== undefined && fillColor !== 'none') {
+      const material = new THREE.MeshStandardMaterial({
+        color: new THREE.Color().setStyle(fillColor),
+        metalness: layer.getProp('materialMetalness') ?? 0.5,
+        roughness: layer.getProp('materialRoughness') ?? 0.5,
+        side: THREE.DoubleSide
+      });
+
+      const shapes = SVGLoader.createShapes(path);
+
+      for (let j = 0; j < shapes.length; j++) {
+        const shape = shapes[j];
+        const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        
+        // Calculate UVs based on shape bounds
+        const posAttribute = geometry.attributes.position;
+        const uvAttribute = geometry.attributes.uv;
+        
+        // Compute bounding box of the geometry
+        geometry.computeBoundingBox();
+        const min = geometry.boundingBox.min;
+        const max = geometry.boundingBox.max;
+        const rangeX = max.x - min.x;
+        const rangeY = max.y - min.y;
+        
+        const updateUVs = (start, count, isSide) => {
+          for (let k = start; k < start + count; k++) {
+            let idx = k;
+            if (geometry.index) {
+              idx = geometry.index.getX(k);
+            }
+
+            if (!isSide) {
+              const x = posAttribute.getX(idx);
+              const y = posAttribute.getY(idx);
+              uvAttribute.setXY(idx, (x - min.x) / rangeX, (y - min.y) / rangeY);
+            } else {
+              const u = uvAttribute.getX(idx);
+              const v = uvAttribute.getY(idx);
+              const scale = 1 / Math.max(rangeX, rangeY);
+              uvAttribute.setXY(idx, u * scale, v * scale);
+            }
+          }
+        };
+
+        if (geometry.groups && geometry.groups.length > 0) {
+          geometry.groups.forEach(g => {
+            updateUVs(g.start, g.count, g.materialIndex === 1);
+          });
+        } else {
+          updateUVs(0, geometry.index ? geometry.index.count : posAttribute.count, false);
+        }
+        uvAttribute.needsUpdate = true;
+
+        // Scale mesh Y to flip coordinate system (SVG is y-down, Three.js is y-up)
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.scale.set(1, -1, 1);
+        group.add(mesh);
+      }
+    }
+  }
+  
+  return group;
+}
+
 function updateEnvMapFromWebGL(state, gl, webglTexture, width, height, intensity) {
   if (!webglTexture || !gl) {
     state.model?.userData.materials?.forEach(m => {
@@ -208,8 +280,6 @@ export function loadModel(layer) {
       layer.modelUrl,
       (data) => {
         const paths = data.paths;
-        const group = new THREE.Group();
-        
         const extrudeSettings = {
           depth: layer.getProp('extrudeDepth') ?? 10,
           bevelEnabled: layer.getProp('bevelEnabled') ?? false,
@@ -217,72 +287,7 @@ export function loadModel(layer) {
           bevelSize: layer.getProp('bevelSize') ?? 1,
           bevelSegments: layer.getProp('bevelSegments') ?? 2
         };
-
-        for (let i = 0; i < paths.length; i++) {
-          const path = paths[i];
-          const fillColor = path.userData.style.fill;
-
-          if (fillColor !== undefined && fillColor !== 'none') {
-            const material = new THREE.MeshStandardMaterial({
-              color: new THREE.Color().setStyle(fillColor),
-              metalness: layer.getProp('materialMetalness') ?? 0.5,
-              roughness: layer.getProp('materialRoughness') ?? 0.5,
-              side: THREE.DoubleSide
-            });
-
-            const shapes = SVGLoader.createShapes(path);
-
-            for (let j = 0; j < shapes.length; j++) {
-              const shape = shapes[j];
-              const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-              
-              // Calculate UVs based on shape bounds
-              const posAttribute = geometry.attributes.position;
-              const uvAttribute = geometry.attributes.uv;
-              
-              // Compute bounding box of the geometry
-              geometry.computeBoundingBox();
-              const min = geometry.boundingBox.min;
-              const max = geometry.boundingBox.max;
-              const rangeX = max.x - min.x;
-              const rangeY = max.y - min.y;
-              
-              const updateUVs = (start, count, isSide) => {
-                for (let k = start; k < start + count; k++) {
-                  let idx = k;
-                  if (geometry.index) {
-                    idx = geometry.index.getX(k);
-                  }
-
-                  if (!isSide) {
-                    const x = posAttribute.getX(idx);
-                    const y = posAttribute.getY(idx);
-                    uvAttribute.setXY(idx, (x - min.x) / rangeX, (y - min.y) / rangeY);
-                  } else {
-                    const u = uvAttribute.getX(idx);
-                    const v = uvAttribute.getY(idx);
-                    const scale = 1 / Math.max(rangeX, rangeY);
-                    uvAttribute.setXY(idx, u * scale, v * scale);
-                  }
-                }
-              };
-
-              if (geometry.groups && geometry.groups.length > 0) {
-                geometry.groups.forEach(g => {
-                  updateUVs(g.start, g.count, g.materialIndex === 1);
-                });
-              } else {
-                updateUVs(0, geometry.index ? geometry.index.count : posAttribute.count, false);
-              }
-              uvAttribute.needsUpdate = true;
-
-              // Scale mesh Y to flip coordinate system (SVG is y-down, Three.js is y-up)
-              const mesh = new THREE.Mesh(geometry, material);
-              mesh.scale.set(1, -1, 1);
-              group.add(mesh);
-            }
-          }
-        }
+        const group = createSVGMeshes(paths, extrudeSettings, layer);
 
         state.model = group;
         state.model.userData.isSVG = true;
@@ -650,6 +655,91 @@ export function draw(ctx, t, layer) {
       const s = scale * 10 * baseScale;
       state.model.scale.set(s, s, s);
       mp.s = scale;
+    }
+
+    if (state.model.userData.isSVGWrapper) {
+      const extrudeDepth = layer.getProp('extrudeDepth') ?? 10;
+      const bevelEnabled = Boolean(layer.getProp('bevelEnabled') ?? false);
+      const bevelThickness = layer.getProp('bevelThickness') ?? 1;
+      const bevelSize = layer.getProp('bevelSize') ?? 1;
+      const bevelSegments = layer.getProp('bevelSegments') ?? 2;
+
+      const changed = mp.ed === undefined || Math.abs(mp.ed - extrudeDepth) > 0.001 ||
+                      mp.be === undefined || Boolean(mp.be) !== bevelEnabled ||
+                      mp.bt === undefined || Math.abs(mp.bt - bevelThickness) > 0.001 ||
+                      mp.bs === undefined || Math.abs(mp.bs - bevelSize) > 0.001 ||
+                      mp.bseg === undefined || mp.bseg !== bevelSegments;
+
+      if (changed) {
+        const paths = state.model.userData.svgPaths;
+        if (paths) {
+          const svgGroup = state.model.children[0];
+          
+          // Clear old meshes
+          while (svgGroup.children.length > 0) {
+            const child = svgGroup.children[0];
+            if (child.geometry) child.geometry.dispose();
+            if (child.material) child.material.dispose();
+            svgGroup.remove(child);
+          }
+
+          // Re-create meshes
+          const extrudeSettings = { depth: extrudeDepth, bevelEnabled, bevelThickness, bevelSize, bevelSegments };
+          const newGroup = createSVGMeshes(paths, extrudeSettings, layer);
+          while (newGroup.children.length > 0) {
+            svgGroup.add(newGroup.children[0]);
+          }
+
+          // Update user data lists
+          state.model.userData.materials = [];
+          state.model.userData.textureMaterials = [];
+          state.model.userData.meshes = [];
+          state.model.traverse((child) => {
+            if (child.isMesh) {
+              state.model.userData.meshes.push(child);
+              state.model.userData.materials.push(child.material);
+              state.model.userData.textureMaterials.push(child.material);
+              if (!child.material.userData) child.material.userData = {};
+              child.material.userData.originalMap = null;
+              child.material.userData.originalNormalMap = null;
+            }
+          });
+
+          // Re-apply textures and materials
+          if (layer.renderNormals && state.model.userData.meshes) {
+            state.model.userData.meshes.forEach(child => {
+              if (!child.userData.originalMaterial) {
+                child.userData.originalMaterial = child.material;
+                child.material = normalsMaterial;
+              }
+            });
+          }
+          if (state.customColorMap && layer.colorMapUrl?.trim() && !layer.renderNormals) {
+            applyTextureToMaterials(state, state.customColorMap, layer.getProp('colorMapScale') ?? 1, layer.getProp('colorMapPosition'), 'map');
+          }
+          if (state.customNormalMap && !layer.renderNormals) {
+            applyTextureToMaterials(state, state.customNormalMap, layer.getProp('normalMapScale') ?? 1, layer.getProp('normalMapPosition'), 'normalMap', layer.getProp('normalMapIntensity'));
+          }
+          if (state.customEnvMap && layer.environmentMapIntensity > 0) {
+            applyEnvMapToMaterials(state, state.customEnvMap, layer.environmentMapIntensity);
+          }
+          
+          // Re-center the SVG group
+          const parent = svgGroup.parent;
+          if (parent) parent.remove(svgGroup);
+          svgGroup.position.set(0, 0, 0);
+          const box = new THREE.Box3().setFromObject(svgGroup);
+          const center = box.getCenter(new THREE.Vector3());
+          svgGroup.position.copy(center).multiplyScalar(-1);
+          if (parent) parent.add(svgGroup);
+
+          mp.ed = extrudeDepth;
+          mp.be = bevelEnabled;
+          mp.bt = bevelThickness;
+          mp.bs = bevelSize;
+          mp.bseg = bevelSegments;
+        }
+      }
     }
 
     const hasMouse = mouseX !== 0 || mouseY !== 0;

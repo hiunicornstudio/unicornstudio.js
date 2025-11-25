@@ -108,6 +108,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.4.36
+- Fixes a bug that caused unexpected resizing when the canvas is affected by CSS transforms
+- Fixes a bug that didn't allow appear animations to complete to the final frame
+
 v1.4.35
 - Fixes a stretching bug caused by certain effects when the background layer is hidden
 

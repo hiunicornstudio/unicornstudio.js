@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.36/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.5.0/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v1.5.0
+- Introduces the Model class! Adds handling of Model layers in the SDK
+- Small bugfixes and optimizations
+
 v1.4.36
 - Fixes a bug that caused unexpected resizing when the canvas is affected by CSS transforms
 - Fixes a bug that didn't allow appear animations to complete to the final frame

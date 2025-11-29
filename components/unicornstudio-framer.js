@@ -9,7 +9,7 @@ import { addPropertyControls, ControlType, RenderTarget } from "framer"
  */
 export default function UnicornStudioEmbed(props) {
     const {
-        sdkVersion = "1.4.36",
+        sdkVersion = "1.5.0",
     } = props
 
     const elementRef = useRef<HTMLDivElement | null>(null)

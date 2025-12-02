@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.5.1/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.5.2/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,7 +108,7 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
-v1.5.1
+v1.5.2
 - Introduces the Model class!
 - Bugfixes and optimizations
 

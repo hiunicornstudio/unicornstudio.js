@@ -9,7 +9,7 @@ import { addPropertyControls, ControlType, RenderTarget } from "framer"
  */
 export default function UnicornStudioEmbed(props) {
     const {
-        sdkVersion = "1.5.2",
+        sdkVersion = "1.5.2", // default
     } = props
 
     const elementRef = useRef<HTMLDivElement | null>(null)
@@ -20,7 +20,8 @@ export default function UnicornStudioEmbed(props) {
     const [versionError, setVersionError] = useState<string | null>(null)
 
     // simple semver check: 1.2.3
-    const isValidVersion = (v: string) => /^\d+\.\d+\.\d+$/.test(v.trim())
+    const isValidVersion = (v: string) =>
+        /^\d+\.\d+\.\d+(-beta)?$/.test(v.trim())
 
     useEffect(() => {
         const isEditingOrPreviewing = ["CANVAS", "PREVIEW"].includes(
@@ -129,6 +130,7 @@ export default function UnicornStudioEmbed(props) {
                 scale: props.scale,
                 fps: props.fps,
                 lazyLoad: !!props.lazyLoad,
+                fixed: !!props.fixed,
                 altText: props.altText,
                 ariaLabel: props.ariaLabel,
             }
@@ -307,6 +309,11 @@ addPropertyControls(UnicornStudioEmbed, {
     lazyLoad: {
         type: ControlType.Boolean,
         title: "Lazy Load",
+        defaultValue: false,
+    },
+    fixed: {
+        type: ControlType.Boolean,
+        title: "Fixed",
         defaultValue: false,
     },
 })

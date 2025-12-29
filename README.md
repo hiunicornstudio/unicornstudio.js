@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.5.3/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.0/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,11 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.0.0
+- **This is a breaking change if upgraded without republishing a live scene**
+- Supports shader only rendering for Image and Shape layers
+- Various improvments and optimizations
+
 v1.5.3
 - Adds support for mask layer depth
 

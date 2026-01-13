@@ -40,7 +40,7 @@ export default function UnicornScene({
     if (typeof window === 'undefined') return;
 
     const initializeScript = (callback: () => void) => {
-      const version = '2.0.1';
+      const version = '2.0.2';
 
       const existingScript = document.querySelector(
         'script[src^="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js"]'

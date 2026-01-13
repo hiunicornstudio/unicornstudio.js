@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.1/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.2/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,8 +108,11 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.0.2
+- Fixes a few bugs related to event animations limited to certain breakpoints
+
 v2.0.1
-- Fixes a bug where state effect transitions weren't being correctly applied
+- Fixes a bug where event animation transitions weren't being correctly applied
 
 v2.0.0
 - **This is a breaking change if upgraded without republishing a live scene**

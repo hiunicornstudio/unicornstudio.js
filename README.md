@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.3/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.4/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,12 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.0.4
+- Adds mousemove event support
+- Adds frame caching support
+- Fixes a bug where multiple event animations competed for the same frame value
+- Fixes a bug where mutiple 3d Models could flip the Y axis of the rest of the scene
+
 v2.0.3
 - Fixes a bug with 3D model scenes rendering below the fold
 - Fixes a scrollinh mouse tracking sync bug / scroll event accuracy bug

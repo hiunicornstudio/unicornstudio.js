@@ -112,7 +112,7 @@ v2.0.4
 - Adds mousemove event support
 - Adds frame caching support
 - Fixes a bug where multiple event animations competed for the same frame value
-- Fixes a bug where mutiple 3d Models could flip the Y axis of the rest of the scene
+- Fixes a bug where multiple 3d Models could flip the Y axis of the rest of the scene
 
 v2.0.3
 - Fixes a bug with 3D model scenes rendering below the fold

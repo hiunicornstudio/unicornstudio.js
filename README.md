@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.4/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.5/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,12 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.0.5
+- Fixes a bug in previous version where 3d model layers would break if they were the top layer
+- Adds "element" hover to 3d models
+- Adds "proximity" mode to mousemove event
+- Fixes a bug where mousemove didn't count as dynamic, preventing interactivity in some cases
+
 v2.0.4
 - Adds mousemove event support
 - Adds frame caching support

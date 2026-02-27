@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.5/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.0/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,11 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.1.0
+- Introduces FlattenedGroups! This supports the new flattening optimization feature.
+- Deprecates string easing functions to remove the eval (new Function). This was a security issue with Shopify templates.
+- Various performance improvements and enhancements.
+
 v2.0.5
 - Fixes a bug in previous version where 3d model layers would break if they were the top layer
 - Adds "element" hover to 3d models

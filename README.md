@@ -111,6 +111,8 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 v2.1.0
 - Introduces FlattenedGroups! This supports the new flattening optimization feature.
 - Deprecates string easing functions to remove the eval (new Function). This was a security issue with Shopify templates.
+- Adds matcap support to 3D models
+- Huge tree shake reduces filesize by 30%
 - Various performance improvements and enhancements.
 
 v2.0.5

@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.0/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.1/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,12 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.1.1
+- Supports the "spring" paramter for mouse interactivity 
+- Adds a few new spring easing curves for Appear and Hover events.
+- Makes 3D models flattenable and adds support for transmissive textures.
+- Fixed a bug where video layers wouldn't play as expected. 
+
 v2.1.0
 - Introduces FlattenedGroups! This supports the new flattening optimization feature.
 - Deprecates string easing functions to remove the eval (new Function). This was a security issue with Shopify templates.

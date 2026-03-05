@@ -26,7 +26,7 @@ export default function UnicornScene({
     projectId,
     jsonFilePath,
     projectJSON,
-    sdkVersion = "2.1.0",
+    sdkVersion = "2.1.1",
     width = "100%",
     height = "100%",
     scale = 1,

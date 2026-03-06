@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.2/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.3/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,9 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.1.3
+- Fixes a bug with 3D model rendering missing methods
+
 v2.1.2
 - Fixes a bug with flattened text layer resizing
 - Fixes a mouse trail quality precision issue with PingPong plane textures

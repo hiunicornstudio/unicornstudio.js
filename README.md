@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.4/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.5/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -108,6 +108,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.1.5
+- Fixes visible aliasing issues with Fresnel light with glass mode 3D models
+- Fixes bugs related to video texture loading and FlattenedGroups
+
 v2.1.4
 - Adds support for HTML only text rendering. If a text layer is on the top and does not need to composite with the shader, it will render as html, simplifying the shader and improving performance.
 - Bugfixes to FlattenedGroup texture cache and mouse value handling

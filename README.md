@@ -109,7 +109,7 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 # Changelog
 v2.1.5
-- Fixes aliasing issues with Fresnelite with glass mode 3D models
+- Fixes visible aliasing issues with Fresnel light with glass mode 3D models
 - Fixes bugs related to video texture loading and FlattenedGroups
 
 v2.1.4

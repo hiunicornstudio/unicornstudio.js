@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.5/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.6/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -82,6 +82,12 @@ You can add a scene dynamically during or after pageload.
 
       // if you need to resume the scene
       // scene.paused = false;
+
+      // hide a layer
+      // scene.layers[1].hide();
+
+      // show a layer
+      // scene.layers[1].show();
     })
     .catch((err) => {
       console.error(err);
@@ -108,6 +114,11 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.1.6
+- Adds dynamic layer hiding with new layer methods `hide` and `show`.
+- Improves mask flattening and allows masks to use different layer depths per breakpoint.
+- Adds user-defined breakpoint min/max ranges so layouts switch at the screen sizes you choose.
+
 v2.1.5
 - Fixes visible aliasing issues with Fresnel light with glass mode 3D models
 - Fixes bugs related to video texture loading and FlattenedGroups

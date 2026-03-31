@@ -118,6 +118,7 @@ v2.1.6
 - Adds dynamic layer hiding with new layer methods `hide` and `show`.
 - Improves mask flattening and allows masks to use different layer depths per breakpoint.
 - Adds user-defined breakpoint min/max ranges so layouts switch at the screen sizes you choose.
+- Fixes a flipped x axis rotation tracking bug for 3D models.
 
 v2.1.5
 - Fixes visible aliasing issues with Fresnel light with glass mode 3D models

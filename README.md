@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.6/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.7/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -119,6 +119,9 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.1.7
+- Fixes buggy dynamic toggling behavior for 3D model layers.
+
 v2.1.6
 - Adds support for dynamic layer toggling at runtime (e.g. hide layers on Mobile breakpoint). 
 - Adds new layer methods `hide` and `show`.

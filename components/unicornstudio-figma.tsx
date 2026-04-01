@@ -26,7 +26,7 @@ export default function UnicornScene({
     projectId,
     jsonFilePath,
     projectJSON,
-    sdkVersion = "2.1.7",
+    sdkVersion = "2.1.8",
     width = "100%",
     height = "100%",
     scale = 1,
@@ -249,7 +249,7 @@ defineProperties(UnicornScene, {
     sdkVersion: {
         label: "SDK Version",
         type: "string",
-        defaultValue: "2.1.7",
+        defaultValue: "2.1.8",
     },
     scale: {
         type: "number",

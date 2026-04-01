@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.7/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.8/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -119,7 +119,7 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
-v2.1.7
+v2.1.8
 - Fixes buggy dynamic toggling behavior for 3D model layers.
 
 v2.1.6

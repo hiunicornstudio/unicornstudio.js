@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.10/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.11/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -119,13 +119,13 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
-v2.1.10
-- Fixes 
-  - text rotation when animated rotation is 0
-  - uCustomTexture using the GPU texture from the render target, 
-  - framebuffer blit when WebGL blit isn't available.
+v2.1.11
+- Fixes text rotation when animated rotation is 0, uCustomTexture using the GPU texture from the render target, and framebuffer blit when WebGL blit isn't available.
 - Improves frame pacing (precise ms intervals, immediate first frame, drift correction).
 - Aligns FlattenedGroup texture locals with flattening; shader effects can use `type: 'video'` in data.textures for video samplers.
+
+v2.1.10
+- Version skipped (no release).
 
 v2.1.9
 - Support for light color animation in 3d models

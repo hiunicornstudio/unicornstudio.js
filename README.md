@@ -120,7 +120,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 # Changelog
 v2.1.10
-- Fixes text rotation when animated rotation is 0, uCustomTexture using the GPU texture from the render target, and framebuffer blit when WebGL blit isn't available.
+- Fixes 
+  - text rotation when animated rotation is 0
+  - uCustomTexture using the GPU texture from the render target, 
+  - framebuffer blit when WebGL blit isn't available.
 - Improves frame pacing (precise ms intervals, immediate first frame, drift correction).
 - Aligns FlattenedGroup texture locals with flattening; shader effects can use `type: 'video'` in data.textures for video samplers.
 

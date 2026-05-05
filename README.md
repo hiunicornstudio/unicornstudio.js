@@ -162,7 +162,7 @@ UnicornStudio.init().then(() => {
 });
 ```
 
-## Cleanup
+### Cleanup
 
 If your app destroys or disables the virtual scroller:
 

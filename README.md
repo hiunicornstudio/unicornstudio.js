@@ -5,7 +5,7 @@
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.11/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.12/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -119,6 +119,59 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+v2.1.12
+- Video playback bugfix
+- Adds support for text links
+- Adds new virtual scroll manager to better support libraries like Lenis
+
+`UnicornStudio.setScroll(scrollY);`
+
+When this is used, Unicorn Studio uses the supplied virtual scroll value for scene visibility and scroll-based animations instead of reading native window.scrollY. This helps on sites where smooth scroll libraries move the page with transforms and native scroll position no longer reflects the visual page position.
+
+To return to normal browser scroll tracking:
+
+`UnicornStudio.useNativeScroll();`
+
+### Lenis Example
+
+```
+const lenis = new Lenis();
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+lenis.on('scroll', ({ scroll }) => {
+  UnicornStudio.setScroll(scroll);
+});
+requestAnimationFrame(raf);
+```
+
+### After SDK Init
+
+```
+UnicornStudio.init().then(() => {
+  const lenis = new Lenis();
+  lenis.on('scroll', ({ scroll }) => {
+    UnicornStudio.setScroll(scroll);
+  });
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+});
+```
+
+## Cleanup
+
+If your app destroys or disables the virtual scroller:
+
+`UnicornStudio.useNativeScroll();`
+
+This clears the virtual scroll override and resumes using:
+
+`window.scrollY || window.pageYOffset`
+
 v2.1.11
 - Fixes 
   - text rotation when animated rotation is 0

@@ -351,8 +351,8 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
-## v2.2.0
-- Adds support for variables
+## v2.2.0-beta1
+- Adds support for variables beta
 - Adds model load callback `model.onLoad`
 
 ## v2.1.12

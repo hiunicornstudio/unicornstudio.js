@@ -313,6 +313,8 @@ scene.setVariables({
 });
 ```
 
+`setVariable()` and `setVariables()` return the scene instance for chaining. If a variable name is unknown or a value fails validation, Unicorn Studio logs a console warning and leaves the current value unchanged.
+
 ### Reading Variables
 
 ```js
@@ -772,9 +774,16 @@ scene.setProp(layerIdOrName, prop, value);
 scene.setTexture(layerIdOrName, samplerName, value);
 scene.getLayers();
 scene.getLayer(layerIdOrName);
+```
 
+Layer objects returned by `scene.getLayer()` support:
+
+```js
 layer.hide();
 layer.show();
+
+// Model layers only:
+modelLayer.onLoad(callback);
 ```
 
 Return values:
@@ -794,3 +803,4 @@ Return values:
 - `getLayer()` returns the runtime layer object for a layer ID or name, or `null`.
 - `layer.hide()` and `layer.show()` return the layer instance for chaining.
 - `onVariableChange()` returns an unsubscribe function.
+- `modelLayer.onLoad(callback)` registers one model load callback on a model layer. It runs when the model finishes loading, or immediately if the model is already loaded, and receives `{ layer, object, modelUrl }` where `object` is the loaded Three.js object/group. Calling it again replaces the previous model load callback.

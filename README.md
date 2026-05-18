@@ -1,11 +1,13 @@
 # Embed your Unicorn Studio projects
 
+Use this runtime to embed, optimize, and customize published Unicorn Studio WebGL scenes from application code. A published scene decides what is customizable; prefer authored variables for integration points, and use direct layer controls only when a variable does not exist.
+
 ## Include the script
 
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.12/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.0-beta1/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -18,16 +20,17 @@ import * as UnicornStudio from "./path/to/unicornStudio.umd.js";
 
 ### Inline
 
-Any element with `data-us-project` will get initialized by calling `UnicornStudio.init()`. If you're hosting your own exported JSON file, use `data-us-project-src` to point to its location. You do not need both `data-us-project` and `data-us-project-src`. If you host your own JSON, remembder you'll need to update this file when you make changes to your scene in Unicorn.studio.
+Any element with `data-us-project` or `data-us-project-src` will get initialized by calling `UnicornStudio.init()`. Use `data-us-project` for a published Unicorn Studio embed ID. If you're hosting your own exported JSON file, use `data-us-project-src` to point to its location. You do not need both `data-us-project` and `data-us-project-src`. If you host your own JSON, remember you'll need to update this file when you make changes to your scene in Unicorn Studio.
 
 ```html
 <div
   class="unicorn-embed"
   data-us-project="YOUR_PROJECT_EMBED_ID"
-  data-us-project-src="path/to/your/PROJECT_ID.json (if you're using this, do not use data-us-project)"
   data-us-scale="1"
   data-us-dpi="1.5"
   data-us-lazyload="true"
+  data-us-production="true"
+  data-us-vars='{"brandColor":"#7c3aed","intensity":0.65}'
   data-us-alttext="Welcome to Unicorn Studio"
   data-us-arialabel="This is a canvas scene"
 ></div>
@@ -42,9 +45,18 @@ Any element with `data-us-project` will get initialized by calling `UnicornStudi
 </script>
 ```
 
+For self-hosted exported JSON, use `data-us-project-src` instead:
+
+```html
+<div
+  class="unicorn-embed"
+  data-us-project-src="path/to/your/PROJECT_ID.json"
+></div>
+```
+
 ### Dynamically
 
-You can add a scene dynamically during or after pageload.
+You can add a scene dynamically during or after page load.
 
 ```html
 <div class="unicorn-embed" id="unicorn"></div>
@@ -56,11 +68,14 @@ You can add a scene dynamically during or after pageload.
     dpi: 1.5, // pixel ratio [optional]
     projectId: "YOUR_PROJECT_EMBED_ID", // the id string for your embed (get this from "embed" export)
     lazyLoad: true, // will not initialize the scene until it scrolls into view
-    filePath: "path/to/your/PROJECT_ID.json", // if youre hosting your own exported json code, point to it here (do not use both filePath and projectId, only one is required)
     fixed: false, // whether the scene should behave like a fixed element or not. automatic by default but this gives explicit control
     altText: "Welcome to Unicorn Studio", // optional text for SEO, going inside the <canvas> tag
     ariaLabel: "This is a canvas scene", // optional text for the aria-label attribute on the <canvas> element
     production: false, // when true, will hit the global edge CDN, learn more in the help docs
+    initialVariables: {
+      brandColor: "#7c3aed",
+      intensity: 0.65,
+    },
     interactivity: {
       // [optional]
       mouse: {
@@ -89,10 +104,10 @@ You can add a scene dynamically during or after pageload.
       // scene.paused = false;
 
       // hide a layer
-      // scene.layers[1].hide();
+      // scene.getLayer("layerIdOrName")?.hide();
 
       // show a layer
-      // scene.layers[1].show();
+      // scene.getLayer("layerIdOrName")?.show();
     })
     .catch((err) => {
       console.error(err);
@@ -102,12 +117,229 @@ You can add a scene dynamically during or after pageload.
 
 Any values set in the UI will be overridden by values defined in the optional params.
 
+Use either `projectId` or `filePath`, not both. `projectId` loads a published Unicorn Studio embed. `filePath` loads a self-hosted exported JSON file.
+
 ## Destroy all scenes:
 
 If you're using UnicornStudio in a SPA with dynamic routing, make sure to destroy them on unmount.
 
 ```js
 UnicornStudio.destroy();
+```
+
+## Embed parameters
+
+Inline embeds use `data-us-[param]` attributes. Dynamic scenes pass the same values as `addScene()` options.
+
+- `data-us-project`: published scene project ID.
+- `data-us-project-src`: path to a hosted project JSON file.
+- `data-us-scale`: canvas rendering scale, usually `0.25` to `1`.
+- `data-us-dpi`: scene resolution, usually `1` to `1.5`.
+- `data-us-fps`: target render loop FPS.
+- `data-us-lazyload`: defers resource creation until the scene enters the viewport.
+- `data-us-production`: serves scene data from the production CDN and improves caching.
+- `data-us-disablemobile`: disables mobile mouse or touch movement.
+- `data-us-disablemouse`: disables mouse interaction.
+- `data-us-fixed`: makes the scene behave like a fixed element.
+- `data-us-alttext`: SEO text placed inside the canvas.
+- `data-us-arialabel`: accessibility label applied to the canvas.
+- `data-us-vars`: JSON object of initial variable values.
+
+The container element must have defined width and height. Scenes use the container dimensions when they initialize.
+
+## Runtime control
+
+The safest runtime control path is:
+
+1. Use `scene.setVariable()` when the scene exposes an authored variable.
+2. Inspect `scene.getVariableManifest()` before guessing variable names or types.
+3. Inspect `scene.getLayers()` before using direct layer controls.
+4. Use `scene.setProp()` only when there is no authored variable for the layer property.
+5. Use `scene.setTexture()` only for texture sampler replacement.
+6. Recreate the scene only for structural changes that the runtime API cannot express.
+
+Runtime precedence for a property is:
+
+```text
+authored base value -> breakpoint value -> variable/runtime override -> active event animation
+```
+
+### Variables
+
+Variables are authored in Unicorn Studio and published with the scene. Use them for stable integration points such as brand colors, theme values, CMS image or video URLs, numeric effect intensity, motion speed, boolean toggles, text-like strings, and values shared across multiple layers.
+
+```js
+scene.setVariable("brandColor", "#ff4fd8");
+scene.setVariable("intensity", 0.9);
+scene.setVariables({
+  brandColor: "#4f46e5",
+  intensity: 0.4,
+});
+```
+
+Read variable values and definitions:
+
+```js
+const brandColor = scene.getVariable("brandColor");
+const allValues = scene.getVariables();
+const definition = scene.getVariableDefinition("brandColor");
+const definitions = scene.getVariableDefinitions();
+const manifest = scene.getVariableManifest();
+```
+
+Listen for variable changes:
+
+```js
+const unsubscribe = scene.onVariableChange((name, value, values) => {
+  console.log("Variable changed:", name, value, values);
+});
+
+unsubscribe();
+```
+
+Common variable types are `number`, `boolean`, `string`, `color`, `vec2`, `vec3`, and `texture`. Color variables should usually be hex strings. Vector variables should include the vector type:
+
+```js
+scene.setVariable("position", { type: "Vec2", x: 0.5, y: 0.35 });
+scene.setVariable("direction", { type: "Vec3", x: 0.2, y: 0.8, z: 0.1 });
+```
+
+### Inspecting layers
+
+Use `getLayers()` only when there is no suitable variable and you need to identify a layer for direct control.
+
+```js
+const layers = scene.getLayers();
+console.table(layers);
+```
+
+Layer descriptors contain `id`, `publicId`, `name`, and `type`. Published layer `id` values are stable canonical IDs. `publicId` is the optional human-readable alias derived from layer names or layer types. Direct layer controls accept either value, but prefer `id` for durable integrations.
+
+Use `scene.getLayer(idOrName)` when you need the runtime layer object for methods such as `hide()` and `show()`.
+
+### Direct layer controls
+
+Use direct controls when a scene was not authored with variables or when building an internal tool.
+
+```js
+scene.setProp("beam", "opacity", 0.5);
+scene.setTexture("distortionLayer", "uTexture", "https://example.com/displacement.png");
+
+const layer = scene.getLayer("mobileOnlyImage");
+layer?.hide();
+layer?.show();
+```
+
+`setProp()`, `setTexture()`, `hide()`, and `show()` update the live scene only. They do not rewrite the published scene JSON and do not persist after the scene is destroyed.
+
+## Performance and production
+
+Unicorn Studio scenes render as WebGL compositions. Runtime integration code cannot rewrite the scene's internal shader graph, but it can control loading, resolution, frame rate, visibility, and scene lifecycle.
+
+Use these knobs before building custom performance logic:
+
+- `scale`: lowers canvas rendering scale. `0.25` to `1` is the useful range.
+- `dpi`: controls scene resolution. Start around `1` to `1.5`; higher values look sharper but cost more.
+- `fps`: sets the render loop target. `30` or `60` is usually enough.
+- `lazyLoad`: delays initialization until viewport entry.
+- `production`: serves scene data from the production CDN and improves caching.
+
+The SDK owns its render loop, visibility gating, resize handling, page visibility handling, and global passive mouse/touch listeners. Use `scene.resize()` manually only after app-driven layout changes that may not trigger a window resize, such as opening a panel or changing a container's CSS size.
+
+Good runtime mitigations:
+
+- Enable `lazyLoad` for scenes below the fold.
+- Use `production` for live embeds.
+- Lower `scale`, `dpi`, or `fps` for ambient or background scenes.
+- Prefer smaller scene containers over fullscreen canvases when the design allows it.
+- Destroy scenes on route unmount instead of hiding them indefinitely.
+- Avoid more than 10 scenes on one page; browsers commonly cap WebGL contexts around 16.
+
+Production updates may take 1-2 minutes to propagate through the CDN. To bypass cached project data during development or QA, use an update query parameter:
+
+```html
+<div data-us-project="YOUR_PROJECT_ID?update=1.0.1"></div>
+```
+
+## Debugging
+
+Start with variables:
+
+```js
+console.table(scene.getVariableManifest());
+console.log(scene.getVariables());
+```
+
+Then inspect layers:
+
+```js
+console.table(scene.getLayers());
+```
+
+If `setVariable()` does nothing, confirm the variable name exists, the variable has at least one binding, the value type matches the variable type, and the published scene includes the variable and its binding.
+
+If `setProp()` does nothing, confirm the layer ID exists and the property is a live runtime uniform or runtime-supported layer property. Prefer a published variable if you need reliable public control.
+
+## Public API reference
+
+The `UnicornStudio` object supports:
+
+```js
+UnicornStudio.init();
+UnicornStudio.addScene(options);
+UnicornStudio.destroy();
+UnicornStudio.setScroll(scrollY);
+UnicornStudio.useNativeScroll();
+```
+
+Common `addScene()` options:
+
+- `element` or `elementId`
+- `projectId` or `filePath`
+- `initialVariables`
+- `fps`
+- `scale`
+- `dpi`
+- `lazyLoad`
+- `fixed`
+- `altText`
+- `ariaLabel`
+- `production`
+- `interactivity.mouse.disableMobile`
+- `interactivity.mouse.disabled`
+- `breakpoints`
+
+The scene object supports:
+
+```js
+scene.resize();
+scene.destroy();
+scene.paused = true;
+scene.paused = false;
+
+scene.setVariable(name, value);
+scene.setVariables(values);
+scene.getVariable(name);
+scene.getVariables();
+scene.getVariableDefinition(name);
+scene.getVariableDefinitions();
+scene.getVariableManifest();
+scene.onVariableChange(callback);
+
+scene.setProp(layerIdOrName, prop, value);
+scene.setTexture(layerIdOrName, samplerName, value);
+scene.getLayers();
+scene.getLayer(layerIdOrName);
+```
+
+Layer objects returned by `scene.getLayer()` support:
+
+```js
+layer.hide();
+layer.show();
+
+// Model layers only:
+modelLayer.onLoad(callback);
 ```
 
 ## React/Next
@@ -119,6 +351,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+## v2.2.0
+- Adds support for variables
+- Adds model load callback `model.onLoad`
+
 ## v2.1.12
 - Video playback bugfix
 - Adds support for text links

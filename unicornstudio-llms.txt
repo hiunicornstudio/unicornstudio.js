@@ -152,8 +152,29 @@ Inline embeds use `data-us-[param]` attributes. Dynamic scenes pass the same val
 - `data-us-alttext`: SEO text placed inside the canvas.
 - `data-us-arialabel`: accessibility label applied to the canvas.
 - `data-us-vars`: JSON object of initial variable values.
+- `data-us-controls`: lazy-loads the Unicorn Studio runtime controls panel for published variables.
+- `data-us-controls-src`: optional override for the controls bundle URL. Use only for local development or debugging.
 
 The container element must have defined width and height. Scenes use the container dimensions when they initialize.
+
+### Runtime Controls Panel
+
+Use `data-us-controls` to show a built-in Unicorn Studio controls panel for any variables published with the scene. The controls bundle is loaded lazily only when controls are enabled.
+
+```html
+<div
+  data-us-project="PROJECT_ID"
+  data-us-controls
+></div>
+```
+
+For debugging an existing embed page, append `?controls=1` or `?controls=true` to the page URL. This enables the same controls panel without changing the embed markup.
+
+```txt
+https://example.com/page-with-embed?controls=1
+```
+
+The panel uses authored variable definitions and calls `scene.setVariable()` under the hood. It is meant for manual tweaking, demos, debugging, or lightweight user-facing controls. Build custom UI with `getVariableManifest()` and `setVariable()` when you need full control over layout or behavior.
 
 ### Scene Lifecycle Helpers
 

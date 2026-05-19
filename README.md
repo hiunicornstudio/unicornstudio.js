@@ -7,7 +7,7 @@ Use this runtime to embed, optimize, and customize published Unicorn Studio WebG
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.0-beta1/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.0-beta4/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -351,9 +351,8 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
-## v2.2.0-beta1
+## v2.2.0-beta4
 - Adds support for variables beta
-- Adds model load callback `model.onLoad`
 
 ## v2.1.12
 - Video playback bugfix

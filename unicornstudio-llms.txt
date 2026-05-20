@@ -303,7 +303,7 @@ Use `initialVariables` when creating a scene in JavaScript:
 ```js
 const scene = await UnicornStudio.addScene({
   projectId: 'PROJECT_ID',
-  element: document.querySelector('[data-scene]'),
+  element: document.querySelector('#unicorn'),
   initialVariables: {
     brandColor: '#7c3aed',
     intensity: 0.65,
@@ -472,12 +472,23 @@ Important details:
 - `mouseSpring` creates spring-like pointer motion.
 - Hover and mousemove state effects use this built-in tracking internally.
 
-There is currently no stable public API such as `scene.getMouse()` for reading Unicorn's internal mouse position. If host application code needs pointer coordinates, listen to pointer events in your app and use `scene.setVariable()` or `scene.setProp()` to pass derived values into the scene.
+Use `scene.getMouse()` to read the latest scene-level pointer position:
+
+```js
+const mouse = scene.getMouse();
+// { x: 0.5, y: 0.5, inBounds: false, moved: false }
+```
+
+`x` is normalized from left to right. `y` is normalized from bottom to top, matching `uMousePos` and Vec2 variable coordinates. Before the SDK observes pointer movement for the scene, `getMouse()` returns the center position with `moved: false`. `inBounds` tells you whether the last observed pointer position is inside the scene element. When `inBounds` is false, `x` and `y` may fall outside the `0` to `1` range.
+
+`getMouse()` is scene-level. It does not include per-item `trackAxes`, `mouseMomentum`, or `mouseSpring`, so a specific layer's final internal `uMousePos` can differ from the scene-level value.
+
+If host application code needs to coordinate pointer events with other app UI, listen to pointer events in your app and use `scene.setVariable()` or `scene.setProp()` to pass derived values into the scene.
 
 Example host-controlled pointer variable:
 
 ```js
-const el = document.querySelector('[data-scene]');
+const el = document.querySelector('[data-us-project]');
 
 el.addEventListener('pointermove', event => {
   const rect = el.getBoundingClientRect();
@@ -489,7 +500,7 @@ el.addEventListener('pointermove', event => {
 });
 ```
 
-Use authored mouse tracking when the interaction is visual and contained inside the scene. Use host pointer events when the interaction must coordinate with other application UI.
+Use authored mouse tracking when the interaction is visual and contained inside the scene. Use `scene.getMouse()` when host code needs the current scene-level pointer position. Use host pointer events when the interaction must coordinate with other application UI.
 
 ## Breakpoints And Events Precedence
 
@@ -738,7 +749,7 @@ If `setProp()` does nothing:
 
 - Do not fetch published project JSON manually just to change a value.
 - Do not mutate internal Curtains.js planes or uniforms as an integration strategy.
-- Do not depend on internal `scene.mouse` data as a public API.
+- Do not depend on internal `scene.mouse` data; use `scene.getMouse()` for public scene-level pointer coordinates.
 - Do not recreate responsiveness in host code when authored Unicorn breakpoints already solve it.
 - Do not rebuild or reinitialize a scene for simple value changes.
 - Do not guess layer IDs when `getLayers()` can tell you the published IDs.
@@ -781,6 +792,7 @@ scene.resize();
 scene.destroy();
 scene.paused = true;
 scene.paused = false;
+scene.getMouse();
 
 scene.setVariable(name, value);
 scene.setVariables(values);
@@ -814,6 +826,7 @@ Return values:
 - `UnicornStudio.destroy()` destroys all active scenes.
 - `scene.resize()` resizes the scene after its container dimensions change.
 - `scene.destroy()` removes one scene.
+- `scene.getMouse()` returns `{ x, y, inBounds, moved }` for the latest scene-level pointer position.
 - `setVariable()`, `setVariables()`, `setProp()`, and `setTexture()` return the scene instance for chaining.
 - `getVariable()` returns the current value for a variable name.
 - `getVariables()` returns an object keyed by variable name.

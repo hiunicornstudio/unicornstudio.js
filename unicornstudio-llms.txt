@@ -45,7 +45,7 @@ Events animate on top of that default while they are active.
 Add the UMD script to the `<head>` of your page:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.12/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.0/dist/unicornStudio.umd.js"></script>
 ```
 
 Or import it into your component:

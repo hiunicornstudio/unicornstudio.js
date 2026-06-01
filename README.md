@@ -146,6 +146,8 @@ Inline embeds use `data-us-[param]` attributes. Dynamic scenes pass the same val
 - `data-us-alttext`: SEO text placed inside the canvas.
 - `data-us-arialabel`: accessibility label applied to the canvas.
 - `data-us-vars`: JSON object of initial variable values.
+- `data-us-preset`: initial preset name or ID.
+- `data-us-controls`: shows the built-in runtime controls panel.
 
 The container element must have defined width and height. Scenes use the container dimensions when they initialize.
 
@@ -205,6 +207,95 @@ Common variable types are `number`, `boolean`, `string`, `color`, `vec2`, `vec3`
 scene.setVariable("position", { type: "Vec2", x: 0.5, y: 0.35 });
 scene.setVariable("direction", { type: "Vec3", x: 0.2, y: 0.8, z: 0.1 });
 ```
+
+### Presets
+
+Presets are named snapshots of variable values. They let a creator publish curated looks like `Brand Dark`, `Brand Light`, or `High Contrast` without asking a host page to set every variable by hand.
+
+Use presets when you want to expose known scene states, theme variants, campaign variants, or content sets. Use individual variables when the host page needs fine-grained control after a preset has been applied.
+
+Create presets from the Variables panel in the editor. A preset stores the current values for published variables, and it is included with the scene the next time you publish.
+
+The built-in runtime controls panel shows a preset dropdown automatically when the published scene includes presets:
+
+```html
+<div
+  data-us-project="YOUR_PROJECT_EMBED_ID"
+  data-us-controls
+></div>
+```
+
+The dropdown applies presets with `scene.setPreset()` and then updates the visible variable controls to match the selected values.
+
+#### Set an initial preset
+
+Use `data-us-preset` for declarative embeds:
+
+```html
+<div
+  data-us-project="YOUR_PROJECT_EMBED_ID"
+  data-us-preset="Brand Dark"
+></div>
+```
+
+If you create scenes in JavaScript, pass `initialPreset` to `UnicornStudio.addScene()`.
+
+```js
+const scene = await UnicornStudio.addScene({
+  projectId: "YOUR_PROJECT_EMBED_ID",
+  element: document.querySelector("#unicorn"),
+  initialPreset: "Brand Dark",
+});
+```
+
+You can also apply a preset to all published scenes on a page using the `preset` query parameter:
+
+```text
+https://example.com/page?preset=Brand%20Dark
+```
+
+Initial preset precedence is:
+
+```text
+initialPreset -> data-us-preset -> ?preset=
+```
+
+Presets apply before `initialVariables` / `data-us-vars`, so explicit variable values can override preset values on load.
+
+```html
+<div
+  data-us-project="YOUR_PROJECT_EMBED_ID"
+  data-us-preset="Brand Dark"
+  data-us-vars='{"headline":"Launch Week"}'
+></div>
+```
+
+In this example, the scene starts from the `Brand Dark` preset, then overrides only the `headline` variable.
+
+#### Use presets at runtime
+
+At runtime, use the scene preset APIs:
+
+```js
+const presets = scene.getPresets();
+const preset = scene.getPreset("Brand Dark");
+
+if (preset) {
+  scene.setPreset(preset.id);
+}
+```
+
+Preset lookup accepts the published preset name or preset id. Preset names are friendlier for hand-authored integrations; ids are better when building a UI from `scene.getPresets()`.
+
+You can still override individual values after applying a preset:
+
+```js
+scene.setPreset("Brand Dark");
+scene.setVariable("headline", "Launch Week");
+scene.setVariable("accentColor", "#ff4fd8");
+```
+
+`scene.setPreset()` updates the scene immediately, returns the scene instance, and notifies `scene.onVariableChange()` listeners for each variable changed by the preset.
 
 ### Inspecting layers
 
@@ -299,6 +390,7 @@ Common `addScene()` options:
 - `element` or `elementId`
 - `projectId` or `filePath`
 - `initialVariables`
+- `initialPreset`
 - `fps`
 - `scale`
 - `dpi`
@@ -327,6 +419,10 @@ scene.getVariableDefinition(name);
 scene.getVariableDefinitions();
 scene.getVariableManifest();
 scene.onVariableChange(callback);
+
+scene.getPresets();
+scene.getPreset(nameOrId);
+scene.setPreset(nameOrId);
 
 scene.setProp(layerIdOrName, prop, value);
 scene.setTexture(layerIdOrName, samplerName, value);

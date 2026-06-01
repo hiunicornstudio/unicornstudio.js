@@ -2,12 +2,14 @@
 
 Use this runtime to embed, optimize, and customize published Unicorn Studio WebGL scenes from application code. A published scene decides what is customizable; prefer authored variables for integration points, and use direct layer controls only when a variable does not exist.
 
+Implementation reference for agents can be found here: https://www.unicorn.studio/unicornstudio-llms.txt
+
 ## Include the script
 
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.0/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.1/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -351,6 +353,9 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+## v2.2.1
+- Adds support for presets
+
 ## v2.2.0
 - Adds support for variables
 

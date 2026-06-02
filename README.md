@@ -9,7 +9,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.1/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.2/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -449,6 +449,10 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+## v2.2.2
+- Fixes bugs related to masking and breakpoint handling
+- Fixes a race condition with heavy media layers and inital animation states
+
 ## v2.2.1
 - Adds support for presets
 

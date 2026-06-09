@@ -9,7 +9,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.2/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.3/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -22,7 +22,7 @@ import * as UnicornStudio from "./path/to/unicornStudio.umd.js";
 
 ### Inline
 
-Any element with `data-us-project` or `data-us-project-src` will get initialized by calling `UnicornStudio.init()`. Use `data-us-project` for a published Unicorn Studio embed ID. If you're hosting your own exported JSON file, use `data-us-project-src` to point to its location. You do not need both `data-us-project` and `data-us-project-src`. If you host your own JSON, remember you'll need to update this file when you make changes to your scene in Unicorn Studio.
+Any element with `data-us-project` or `data-us-project-src` will get initialized by calling `UnicornStudio.init()`. Use `data-us-project` for a published Unicorn Studio embed ID. If you're hosting your own exported JSON file, use `data-us-project-src` to point to its location. Do not use both `data-us-project` and `data-us-project-src`. If you host your own JSON, remember you'll need to update this file when you make changes to your scene in Unicorn Studio.
 
 ```html
 <div
@@ -30,9 +30,6 @@ Any element with `data-us-project` or `data-us-project-src` will get initialized
   data-us-project="YOUR_PROJECT_EMBED_ID"
   data-us-scale="1"
   data-us-dpi="1.5"
-  data-us-lazyload="true"
-  data-us-production="true"
-  data-us-vars='{"brandColor":"#7c3aed","intensity":0.65}'
   data-us-alttext="Welcome to Unicorn Studio"
   data-us-arialabel="This is a canvas scene"
 ></div>
@@ -449,6 +446,9 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+## v2.2.3
+- Adds responsive values to events
+
 ## v2.2.2
 - Fixes bugs related to masking and breakpoint handling
 - Fixes a race condition with heavy media layers and inital animation states

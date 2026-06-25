@@ -9,7 +9,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.5/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.6/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -446,6 +446,9 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+
+## v2.2.6
+- Fixes bug where text in flattened groups didnt respond to breakpoint changes
 
 ## v2.2.5
 - Fixes a bug related to pre-multiplied alpha and images with transparency

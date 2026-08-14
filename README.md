@@ -9,7 +9,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.8/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.9/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -446,6 +446,11 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+
+## v2.2.9
+- Adds play error handling for video effects, in cases like low battery mode on Safari Mobile. Falls back to video cover. 
+- Better first frame sync for extended video loading.
+- Adds depthTest and cullFace as layer configurable plane parameters 
 
 ## v2.2.8
 - Adds support for higher density particle effects via enhanced rendering reliability for ping-pong (sizing, blending, visibility sync), and “independent geometry” draw behavior.

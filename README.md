@@ -9,7 +9,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.12/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.13/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -446,6 +446,9 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+
+## v2.2.13
+- Allows previous frame rendertargets to get custom size and floating points to support texture input particle effects
 
 ## v2.2.12
 - Adds missing null checks during scene context lost and teardown

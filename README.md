@@ -447,6 +447,9 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 # Changelog
 
+## v2.2.14
+- Fixes race condition crash when scene is torn down before while its initializing
+
 ## v2.2.13
 - Allows previous frame rendertargets to get custom size and floating points to support texture input particle effects
 

@@ -9,7 +9,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.2.14/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.3.0/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -446,6 +446,11 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+
+## v2.3.0
+- Adds support for all new GPU Text layers
+- Adds support for boolean variables like layer animation and visibility
+- Performance improvements like faster scene fetching, texture caching, and text layout work reduction
 
 ## v2.2.14
 - Fixes race condition crash when scene is torn down before while its initializing

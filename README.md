@@ -9,7 +9,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.3.0/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.4.0/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -446,6 +446,20 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+
+## v2.4.0
+
+- Event timeline runtime:
+  - Events on the same property chain into sequences.
+  - Different event types on the same property add together.
+  - Hover, scroll and mouse-move events accept a startValue; scroll and mouse-move also accept a transition.
+  - Hover now runs forward while hovered and back when it isn't.
+  - Springs carry past the ends of scroll and mouse tracks instead of stopping there.
+  - Switching breakpoints releases events that are off in the new breakpoint.
+- Frame-rate cap jitter: scenes capped at the display's refresh rate no longer drop frames.
+- Shader compiles are faster: the renderer checks only whether the program linked, and reads compile errors only after a failed link.
+- Background tabs: scenes finish setting up in a hidden tab instead of waiting for an animation frame.
+- Text: animating fontSize, lineHeight or letterSpacing to 0 now works.
 
 ## v2.3.0
 - Adds support for all new GPU Text layers

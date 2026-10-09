@@ -452,11 +452,13 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
  - Page load performance
   - Parallel shader compile and background image decoding unblocks main thread
   - Shows improvement to Lighthouse scores
- - AI generated Text variables changing the actual text in embeds
- - Multi scene state managent
+ - Multi scene management
   - A page can have any number of scenes, up to 16 WebGL contexts live (8 on Android), giving them to visible scenes first
   - Offscreen scenes beyond that show their last frame and come back as they scroll into view
   - WebGL used by the host page itself, such as a three.js canvas, counts against the same browser limit
+ - Bugfixes
+  - AI generated Text variables changing the actual text in embeds
+  - Model layers recreated a redundant matcap texture on load
 
 ## v2.4.0
 

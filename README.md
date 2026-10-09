@@ -9,7 +9,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.4.0/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.4.1/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -446,6 +446,17 @@ https://codepen.io/georgehastings/pen/ExGrqMJ
 
 
 # Changelog
+
+## v2.4.1
+
+ - Page load performance
+  - Parallel shader compile and background image decoding unblocks main thread
+  - Shows improvement to Lighthouse scores
+ - AI generated Text variables changing the actual text in embeds
+ - Multi scene state managent
+  - A page can have any number of scenes, up to 16 WebGL contexts live (8 on Android), giving them to visible scenes first
+  - Offscreen scenes beyond that show their last frame and come back as they scroll into view
+  - WebGL used by the host page itself, such as a three.js canvas, counts against the same browser limit
 
 ## v2.4.0
 

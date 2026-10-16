@@ -4,12 +4,23 @@ Use this runtime to embed, optimize, and customize published Unicorn Studio WebG
 
 Implementation reference for agents can be found here: https://www.unicorn.studio/unicornstudio-llms.txt
 
+## Rules for agents
+
+- Load the SDK once and pin a version. Call `UnicornStudio.init()` after your scene elements exist. Calling it again later is safe: it only initializes elements it hasn't seen.
+- Give each scene container a real width and height before it initializes.
+- Boolean `data-us-*` attributes need the value `"true"`. Any non-empty value turns them on, including `"false"`, and a bare attribute like `data-us-lazyload` is ignored. To turn one off, leave it out. `data-us-controls` is the exception and works bare.
+- The SDK reads `window` when it loads. In SSR frameworks like Next.js, load it on the client only, or use `unicornstudio-react/next`.
+- Control a scene with presets and variables first. Use `setProp()` and `setTexture()` only when no variable exists.
+- The SDK already handles the render loop, pausing offscreen scenes, resizing, tab visibility, mouse tracking and WebGL context limits. Don't add IntersectionObservers, render loops, resize observers or destroy/recreate logic for any of these.
+- Don't fetch project JSON yourself or recreate a scene to change a value.
+- Need a ready-made visual? Start from the example catalog: https://www.unicorn.studio/llm-example-projects.json
+
 ## Include the script
 
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.4.2/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.4.3/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -62,7 +73,7 @@ You can add a scene dynamically during or after page load.
 <script>
   UnicornStudio.addScene({
     elementId: "unicorn", // id of the HTML element to render your scene in (the scene will use its dimensions)
-    fps: 60, // frames per second (0-120) [optional]
+    fps: 60, // frames per second (1-120) [optional]
     scale: 1, // rendering scale, use smaller values for performance boost (0.25-1) [optional]
     dpi: 1.5, // pixel ratio [optional]
     projectId: "YOUR_PROJECT_EMBED_ID", // the id string for your embed (get this from "embed" export)
@@ -118,13 +129,9 @@ Any values set in the UI will be overridden by values defined in the optional pa
 
 Use either `projectId` or `filePath`, not both. `projectId` loads a published Unicorn Studio embed. `filePath` loads a self-hosted exported JSON file.
 
-## Destroy all scenes:
+## Destroy scenes
 
-If you're using UnicornStudio in a SPA with dynamic routing, make sure to destroy them on unmount.
-
-```js
-UnicornStudio.destroy();
-```
+`UnicornStudio.destroy()` destroys every scene on the page. In a SPA, destroy a component's own scene on unmount with `scene.destroy()`, and use `UnicornStudio.destroy()` only when every scene on the page should go.
 
 ## Embed parameters
 
@@ -152,6 +159,7 @@ The container element must have defined width and height. Scenes use the contain
 
 The safest runtime control path is:
 
+0. Use `scene.setPreset()` when an authored preset matches the state you want.
 1. Use `scene.setVariable()` when the scene exposes an authored variable.
 2. Inspect `scene.getVariableManifest()` before guessing variable names or types.
 3. Inspect `scene.getLayers()` before using direct layer controls.
@@ -343,7 +351,8 @@ Good runtime mitigations:
 - Lower `scale`, `dpi`, or `fps` for ambient or background scenes.
 - Prefer smaller scene containers over fullscreen canvases when the design allows it.
 - Destroy scenes on route unmount instead of hiding them indefinitely.
-- Avoid more than 10 scenes on one page; browsers commonly cap WebGL contexts around 16.
+- A page can hold any number of scenes. The SDK keeps up to 14 live on desktop and 8 on Android, gives WebGL contexts to scenes on screen first, and rebuilds the rest as they scroll back in. Don't destroy and recreate offscreen scenes to stay under the browser's limit. Other WebGL on the page, such as a three.js canvas or a map, counts against the same limit.
+- Call `scene.resize()` after showing a container that was hidden (`display: none`) when the scene initialized, such as a tab, modal or accordion.
 
 Production updates may take 1-2 minutes to propagate through the CDN. To bypass cached project data during development or QA, use an update query parameter:
 
@@ -369,6 +378,8 @@ console.table(scene.getLayers());
 If `setVariable()` does nothing, confirm the variable name exists, the variable has at least one binding, the value type matches the variable type, and the published scene includes the variable and its binding.
 
 If `setProp()` does nothing, confirm the layer ID exists and the property is a live runtime uniform or runtime-supported layer property. Prefer a published variable if you need reliable public control.
+
+Append `?controls=1` to the page URL to open the controls panel on any embed without changing its markup.
 
 ## Public API reference
 
@@ -425,7 +436,10 @@ scene.setProp(layerIdOrName, prop, value);
 scene.setTexture(layerIdOrName, samplerName, value);
 scene.getLayers();
 scene.getLayer(layerIdOrName);
+scene.getMouse(); // { x, y, inBounds, moved }, y runs bottom to top.
 ```
+
+Setters return the scene for chaining. An unknown variable name logs a warning and changes nothing. `getLayer()` returns null when no layer matches.
 
 Layer objects returned by `scene.getLayer()` support:
 
@@ -437,15 +451,22 @@ layer.show();
 modelLayer.onLoad(callback);
 ```
 
-## React/Next
-See [this repo](https://github.com/diegopeixoto/unicornstudio-react) for a great react/next npm package. 
+## React / Next.js
 
-## Live example
+Use [unicornstudio-react](https://github.com/diegopeixoto/unicornstudio-react). In Next.js, import it from `unicornstudio-react/next`. Its `variables` and `preset` props sync to the live scene without re-initializing it, and `sceneRef` gives you the scene object for the rest of the API.
 
-https://codepen.io/georgehastings/pen/ExGrqMJ
-
+If you use the SDK directly, import it only in client code, such as inside `useEffect`. It reads `window` when it loads, so a server render fails.
 
 # Changelog
+
+## v2.4.3
+
+- Scenes no longer flash the wrong texture while loading, and a single failed asset no longer leaves a scene blank.
+- Pages with many scenes are more reliable: scenes that crash recover on their own, and scenes are built before you scroll to them.
+- Desktop pages keep 14 scenes live, leaving two WebGL contexts free for other WebGL on the page.
+- Scroll animations start in the right position, line up correctly in sticky sections, and no longer look stuck after a fast scroll back up.
+- Appear animations play correctly after you switch back to the tab.
+- Fixed static layers going blank after a resize, stretched scenes in content-sized containers, misplaced text in positioned containers, and effects on 3D models sampling the wrong layer.
 
 ## v2.4.2
 - Adds child effect support for Model layers

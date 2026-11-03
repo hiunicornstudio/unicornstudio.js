@@ -20,7 +20,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.4.3/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.4.4/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -458,6 +458,10 @@ Use [unicornstudio-react](https://github.com/diegopeixoto/unicornstudio-react). 
 If you use the SDK directly, import it only in client code, such as inside `useEffect`. It reads `window` when it loads, so a server render fails.
 
 # Changelog
+
+## v2.4.4
+
+- Adds animation support for custom Shape layers
 
 ## v2.4.3
 

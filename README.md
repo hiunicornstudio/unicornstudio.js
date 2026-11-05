@@ -20,7 +20,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.4.4/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.5.0/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -458,6 +458,13 @@ Use [unicornstudio-react](https://github.com/diegopeixoto/unicornstudio-react). 
 If you use the SDK directly, import it only in client code, such as inside `useEffect`. It reads `window` when it loads, so a server render fails.
 
 # Changelog
+
+## 2.5.0
+
+- A scene with no layer animating on its own draws a frame only when something moves (event playback, tracked mouse movement, a variable or prop change, a resize) and otherwise leaves its last frame on screen.
+- Full-resolution text, shape, and image layers with Normal, Add, or Screen blending and no effects or mask draw straight onto the layer beneath them when both redraw each frame, instead of into a render target of their own.
+- A browser without WebGL 2 shows the scene's text layers as positioned HTML text in their font, size, and fill color, so copy stays readable. Effects, images, shapes, and blend modes do not render, and text layers with Text as HTML turned off stay hidden.
+- Adds layout texture support for word-by-word text animations
 
 ## v2.4.4
 

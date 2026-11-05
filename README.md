@@ -20,7 +20,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.5.1/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.5.2/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -459,7 +459,7 @@ If you use the SDK directly, import it only in client code, such as inside `useE
 
 # Changelog
 
-## 2.5.1
+## 2.5.2
 
 - A scene with no layer animating on its own draws a frame only when something moves (event playback, tracked mouse movement, a variable or prop change, a resize) and otherwise leaves its last frame on screen.
 - Full-resolution text, shape, and image layers with Normal, Add, or Screen blending and no effects or mask draw straight onto the layer beneath them when both redraw each frame, instead of into a render target of their own.

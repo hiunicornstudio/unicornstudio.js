@@ -459,6 +459,13 @@ If you use the SDK directly, import it only in client code, such as inside `useE
 
 # Changelog
 
+## 2.6.0
+
+- Video layers play like image layers: same sizing, masks, blend modes, and child effects, plus Speed and Loop. The thumbnail stays up as a poster until the first frame. Existing scenes keep the legacy Video effect.
+- The Feedback effect feeds previous frames back into the scene, including when it is the last layer in the stack.
+- Fonts load with `font-display: swap`, and `http:` font URLs are loaded over `https:`.
+- `addScene()` accepts a `modelRenderer` loader, for the npm components package.
+
 ## 2.5.2
 
 - A scene with no layer animating on its own draws a frame only when something moves (event playback, tracked mouse movement, a variable or prop change, a resize) and otherwise leaves its last frame on screen.

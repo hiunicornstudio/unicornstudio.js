@@ -1,4 +1,4 @@
-# Embed your Unicorn Studio projects
+# Embed Unicorn Studio Scenes
 
 Use this runtime to embed, optimize, and customize published Unicorn Studio WebGL scenes from application code. A published scene decides what is customizable; prefer authored variables for integration points, and use direct layer controls only when a variable does not exist.
 
@@ -9,7 +9,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 - Load the SDK once and pin a version. Call `UnicornStudio.init()` after your scene elements exist. Calling it again later is safe: it only initializes elements it hasn't seen.
 - Give each scene container a real width and height before it initializes.
 - Boolean `data-us-*` attributes need the value `"true"`. Any non-empty value turns them on, including `"false"`, and a bare attribute like `data-us-lazyload` is ignored. To turn one off, leave it out. `data-us-controls` is the exception and works bare.
-- The SDK reads `window` when it loads. In SSR frameworks like Next.js, load it on the client only, or use `unicornstudio-react/next`.
+- The SDK reads `window` when it loads. In SSR frameworks like Next.js, load it on the client only, or use the official [`unicornstudio`](https://www.npmjs.com/package/unicornstudio) npm package, which is safe to import during a server render.
 - Control a scene with presets and variables first. Use `setProp()` and `setTexture()` only when no variable exists.
 - The SDK already handles the render loop, pausing offscreen scenes, resizing, tab visibility, mouse tracking and WebGL context limits. Don't add IntersectionObservers, render loops, resize observers or destroy/recreate logic for any of these.
 - Don't fetch project JSON yourself or recreate a scene to change a value.
@@ -28,6 +28,14 @@ or import into your component
 ```js
 import * as UnicornStudio from "./path/to/unicornStudio.umd.js";
 ```
+
+or, in an app with a bundler, install the official npm package, which has components for React, Next.js, Vue and Svelte
+
+```bash
+npm install unicornstudio
+```
+
+The SDK ships inside the package, and the package version is the SDK version. See [npm package](#npm-package) below.
 
 ## Initialize your scene:
 
@@ -451,9 +459,33 @@ layer.show();
 modelLayer.onLoad(callback);
 ```
 
-## React / Next.js
+## npm package
 
-Use [unicornstudio-react](https://github.com/diegopeixoto/unicornstudio-react). In Next.js, import it from `unicornstudio-react/next`. Its `variables` and `preset` props sync to the live scene without re-initializing it, and `sceneRef` gives you the scene object for the rest of the API.
+The official [`unicornstudio`](https://www.npmjs.com/package/unicornstudio) package has typed components for React, Next.js, Vue and Svelte. The SDK ships inside it, so nothing loads from a CDN, and `unicornstudio@2.6.0` runs SDK v2.6.0.
+
+```bash
+npm install unicornstudio
+```
+
+```tsx
+import UnicornScene from "unicornstudio/react"; // or "unicornstudio/next"
+
+export default function Hero() {
+  return <UnicornScene projectId="YOUR_PROJECT_ID" width="100%" height={480} />;
+}
+```
+
+| Framework     | Import                                       |
+| ------------- | -------------------------------------------- |
+| React         | `unicornstudio/react`                        |
+| Next.js       | `unicornstudio/next`                         |
+| Vue           | `unicornstudio/vue`                          |
+| Svelte        | `unicornstudio/svelte`                       |
+| Anything else | `import { mountScene } from "unicornstudio"` |
+
+The `variables` and `preset` props sync to the live scene without re-initializing it. For the rest of the API, get the scene object from `sceneRef` in React, `scene` on the template ref in Vue, or `bind:scene` in Svelte. Every option and event is in the [package README](https://github.com/hiunicornstudio/unicornstudio#readme).
+
+Coming from `unicornstudio-react`? Change the import to `unicornstudio/react` or `unicornstudio/next`. The [migration notes](https://github.com/hiunicornstudio/unicornstudio#moving-from-unicornstudio-react) list the few differences.
 
 If you use the SDK directly, import it only in client code, such as inside `useEffect`. It reads `window` when it loads, so a server render fails.
 
@@ -464,7 +496,7 @@ If you use the SDK directly, import it only in client code, such as inside `useE
 - Video layers play like image layers: same sizing, masks, blend modes, and child effects, plus Speed and Loop. The thumbnail stays up as a poster until the first frame. Existing scenes keep the legacy Video effect.
 - The Feedback effect feeds previous frames back into the scene, including when it is the last layer in the stack.
 - Fonts load with `font-display: swap`, and `http:` font URLs are loaded over `https:`.
-- `addScene()` accepts a `modelRenderer` loader, for the npm components package.
+- `addScene()` accepts a `modelRenderer` loader, for the [`unicornstudio`](https://www.npmjs.com/package/unicornstudio) npm package.
 
 ## 2.5.2
 

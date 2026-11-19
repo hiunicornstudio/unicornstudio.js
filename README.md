@@ -20,7 +20,7 @@ Implementation reference for agents can be found here: https://www.unicorn.studi
 Add the script tag to the `<head>` of your page
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.6.0/dist/unicornStudio.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.6.1/dist/unicornStudio.umd.js"></script>
 ```
 
 or import into your component
@@ -490,6 +490,13 @@ Coming from `unicornstudio-react`? Change the import to `unicornstudio/react` or
 If you use the SDK directly, import it only in client code, such as inside `useEffect`. It reads `window` when it loads, so a server render fails.
 
 # Changelog
+
+## 2.6.1
+
+- Added `uClick`: `1.0` while the pointer is held down on the scene, `0.0` otherwise.
+- Added `uDragOffset`: how far the pointer has been dragged while held, summed over every drag, in canvas fractions. It holds its value on release.
+- Both are available to effect shaders that declare them. Text and shape treatments do not receive them, and layers that read them are not flattened.
+
 
 ## 2.6.0
 
